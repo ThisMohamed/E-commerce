@@ -49,6 +49,7 @@ Deployed on **Netlify** with SSR via `@netlify/angular-runtime`.
 - **Wishlist** — Save products, real-time heart-icon toggle on product cards, move-to-cart button
 
 ### UI / UX
+- **Voice Search & Navigation** — Web Speech API integration in the navbar: speak to search for products (navigates to `/search?q=...`) or issue navigation commands ("go to cart", "اذهب إلى المفضلة") in English or Arabic, with automatic language detection and a pulsing listening animation
 - **Dark Mode** — Class-based dark theme toggled from the navbar; persists in `localStorage`; respects `prefers-color-scheme` on first visit
 - **Bilingual (EN / AR)** — Full i18n with `ngx-translate`; switching to Arabic flips the layout to RTL (`dir="rtl"` on `<html>`)
 - **Responsive Design** — Mobile-first layout built with Tailwind CSS v4 + Flowbite components
@@ -215,7 +216,7 @@ Angular SSR is enabled throughout. All `localStorage`, `window`, and DOM access 
 ### Shared Components
 | Component | Description |
 |---|---|
-| `NavbarComponent` | Responsive navbar with language switcher, dark-mode toggle, cart/wishlist badges, and user dropdown |
+| `NavbarComponent` | Responsive navbar with language switcher, dark-mode toggle, cart/wishlist badges, user dropdown, and voice search/navigation (Web Speech API, EN + AR) |
 | `FooterComponent` | 4-column footer with payment icons and navigation links |
 | `ProductCardComponent` | Reusable product card with add-to-cart, wishlist toggle, rating, and discount badge |
 | `ImageMagnifierComponent` | Thumbnail strip + 2.5× lens-style zoom on the main image |
