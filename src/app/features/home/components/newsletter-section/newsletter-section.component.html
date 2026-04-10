@@ -1,0 +1,163 @@
+<section class="py-16 bg-linear-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 overflow-x-hidden">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative">
+      <div
+        class="relative bg-linear-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 rounded-[2.5rem] border border-emerald-100/50 dark:border-gray-700 shadow-2xl shadow-emerald-500/10 overflow-hidden"
+      >
+        <div
+          class="absolute top-0 right-0 w-80 h-80 bg-linear-to-br from-emerald-200/40 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 w-64 h-64 bg-linear-to-tr from-teal-200/30 to-transparent rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"
+        ></div>
+
+        <div class="relative grid lg:grid-cols-5 gap-8 p-6 md:p-10 lg:p-14">
+          <div class="lg:col-span-3 space-y-6">
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30"
+              >
+                <i class="fa-solid fa-envelope text-white"></i>
+              </div>
+              <div>
+                <h3
+                  class="text-xs md:text-sm font-semibold text-emerald-600 uppercase tracking-wide"
+                >
+                  {{ 'newsletter.badge' | translate }}
+                </h3>
+                <p class="text-2xs md:text-xs text-gray-500 dark:text-gray-400 font-medium">
+                  {{ 'newsletter.subscribers' | translate }}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-snug">
+                {{ 'newsletter.title' | translate }}
+                <span class="text-emerald-600">{{ 'newsletter.titleHighlight' | translate }}</span>
+              </h2>
+              <p class="text-gray-500 dark:text-gray-400 mt-3 text-base md:text-lg font-medium">
+                {{ 'newsletter.description' | translate }}
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 md:gap-3">
+              <div
+                class="flex items-center gap-2 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-emerald-100 dark:border-gray-600 px-3 py-2 rounded-full shadow-sm"
+              >
+                <i class="fa-solid fa-leaf text-emerald-600 text-2xs"></i>
+                <span class="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ 'newsletter.features.picks' | translate }}
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-2 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-emerald-100 dark:border-gray-600 px-3 py-2 rounded-full shadow-sm"
+              >
+                <i class="fa-solid fa-truck text-emerald-600 text-2xs"></i>
+                <span class="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ 'newsletter.features.delivery' | translate }}
+                </span>
+              </div>
+              <div
+                class="flex items-center gap-2 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-emerald-100 dark:border-gray-600 px-3 py-2 rounded-full shadow-sm"
+              >
+                <i class="fa-solid fa-tag text-emerald-600 text-2xs"></i>
+                <span class="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300">{{
+                  'newsletter.features.deals' | translate
+                }}</span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                  <input
+                    type="email"
+                    [placeholder]="'newsletter.form.placeholder' | translate"
+                    class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl text-gray-800 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm placeholder:text-gray-400 font-medium"
+                    required
+                  />
+                </div>
+                <button
+                  class="group flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-semibold bg-linear-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/30 hover:scale-[1.02] hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 cursor-pointer"
+                >
+                  <span>{{ 'newsletter.form.button' | translate }}</span>
+                  <i
+                    class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"
+                  >
+                  </i>
+                </button>
+              </div>
+              <p class="text-2xs text-gray-400 mt-3 pl-1 font-medium">
+                {{ 'newsletter.form.spamNote' | translate }}
+              </p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 lg:border-l lg:border-emerald-100 lg:pl-8">
+            <div class="h-full flex flex-col justify-center">
+              <div
+                class="bg-linear-to-br from-gray-900 to-gray-800 rounded-3xl p-6 md:p-8 text-white relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"
+                ></div>
+
+                <div class="relative space-y-5">
+                  <div
+                    class="inline-block bg-emerald-500/20 text-emerald-400 text-2xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/30"
+                  >
+                    {{ 'mobileApp.badge' | translate }}
+                  </div>
+                  <h3 class="text-xl md:text-2xl font-bold leading-tight">
+                    {{ 'mobileApp.title' | translate }}
+                  </h3>
+                  <p class="text-gray-400 text-xs md:text-sm leading-relaxed font-medium">
+                    {{ 'mobileApp.description' | translate }}
+                  </p>
+
+                  <div class="flex flex-col gap-3 pt-2">
+                    <a
+                      routerLink="/home"
+                      class="flex items-center gap-3 bg-white/10 hover:bg-white/15 hover:scale-[1.02] border border-white/10 px-4 py-3 rounded-xl transition-all"
+                    >
+                      <i class="fa-brands fa-apple text-xl"></i>
+                      <div class="text-left">
+                        <div class="text-[9px] text-gray-400 uppercase font-medium">
+                          {{ 'mobileApp.stores.apple.label' | translate }}
+                        </div>
+                        <div class="text-sm font-semibold">
+                          {{ 'mobileApp.stores.apple.name' | translate }}
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      routerLink="/home"
+                      class="flex items-center gap-3 bg-white/10 hover:bg-white/15 hover:scale-[1.02] border border-white/10 px-4 py-3 rounded-xl transition-all"
+                    >
+                      <i class="fa-brands fa-google-play text-lg"></i>
+                      <div class="text-left">
+                        <div class="text-[9px] text-gray-400 uppercase font-medium">
+                          {{ 'mobileApp.stores.google.label' | translate }}
+                        </div>
+                        <div class="text-sm font-semibold">
+                          {{ 'mobileApp.stores.google.name' | translate }}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="flex items-center gap-2 pt-2 text-sm">
+                    <span class="text-yellow-400 font-medium">★★★★★</span>
+                    <span class="text-gray-400 font-medium">
+                      {{ 'mobileApp.stats' | translate }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

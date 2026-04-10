@@ -1,0 +1,45 @@
+.item {
+  background-image:
+    linear-gradient(to right, #00c758e6, #05df7280), url(/assets/home-slider-1.d79601a8.png);
+  background-size: cover;
+  background-position: center;
+}
+swiper-container::part(button-next),
+swiper-container::part(button-prev) {
+  color: var(--color-primary);
+  background-color: #fff;
+  width: 18px;
+  height: 18px;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00000071;
+  transition: all 0.4s;
+}
+swiper-container::part(button-next):hover,
+swiper-container::part(button-prev):hover {
+  transform: scale(1.1);
+}
+
+swiper-container::part(bullet) {
+  opacity: 1;
+  background: #ffffff80;
+  width: 12px;
+  height: 12px;
+  transition: all 0.3s;
+}
+swiper-container::part(bullet-active) {
+  border-radius: 6px;
+  width: 32px;
+  transition: all 0.3s;
+  opacity: 1;
+  height: 12px;
+  background-color: #fff;
+  transition: all 0.3s;
+}
+
+@media (max-width: 767px) {
+  swiper-container::part(button-prev),
+  swiper-container::part(button-next) {
+    display: none;
+  }
+}

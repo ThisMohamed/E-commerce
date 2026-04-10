@@ -1,0 +1,152 @@
+::ng-deep .ngx-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 0;
+  list-style: none;
+  user-select: none;
+}
+::ng-deep .ngx-pagination li {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+::ng-deep .ngx-pagination a {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1.5px solid #0aad0a !important;
+  background-color: #ffffff !important;
+  color: #0aad0a !important;
+}
+
+::ng-deep .ngx-pagination a:hover {
+  background-color: #0aad0a !important;
+  color: #ffffff !important;
+  border-color: #0aad0a !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(10, 173, 10, 0.2);
+}
+
+::ng-deep .ngx-pagination .current {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  border-radius: 12px !important;
+  font-weight: 700;
+  font-size: 15px;
+  background: #0aad0a !important;
+  color: white !important;
+  border: 1.5px solid #0aad0a !important;
+  box-shadow: 0 8px 16px -4px rgba(10, 173, 10, 0.3);
+  transform: scale(1.1);
+  cursor: default;
+}
+
+::ng-deep .ngx-pagination .pagination-previous a,
+::ng-deep .ngx-pagination .pagination-next a {
+  padding: 0 22px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #0aad0a !important;
+  color: #0aad0a !important;
+  background: white !important;
+  font-weight: 700;
+  min-width: 80px;
+}
+
+::ng-deep .ngx-pagination .pagination-previous a:hover,
+::ng-deep .ngx-pagination .pagination-next a:hover {
+  background: #0aad0a !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(10, 173, 10, 0.2);
+}
+
+::ng-deep .ngx-pagination .disabled {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px !important;
+  height: 42px;
+  border-radius: 12px !important;
+  border: 1.5px solid #e5e7eb !important;
+  color: #9ca3af !important;
+  background: #f9fafb !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  ::ng-deep .ngx-pagination li:not(.pagination-previous):not(.pagination-next) {
+    display: none !important;
+  }
+  ::ng-deep .ngx-pagination {
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+    padding: 20px 5px;
+  }
+  ::ng-deep .ngx-pagination .pagination-previous,
+  ::ng-deep .ngx-pagination .pagination-next {
+    flex: 1;
+  }
+  ::ng-deep .ngx-pagination .pagination-previous a,
+  ::ng-deep .ngx-pagination .pagination-next a,
+  ::ng-deep .ngx-pagination .disabled {
+    width: 100% !important;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+:host ::ng-deep .ngx-pagination .pagination-previous::before,
+:host ::ng-deep .ngx-pagination .pagination-previous a::before,
+:host ::ng-deep .ngx-pagination .pagination-previous span::before {
+  content: '' !important;
+  display: none !important;
+}
+
+:host ::ng-deep .ngx-pagination .pagination-next::after,
+:host ::ng-deep .ngx-pagination .pagination-next a::after,
+:host ::ng-deep .ngx-pagination .pagination-next span::after {
+  content: '' !important;
+  display: none !important;
+}
+
+:host ::ng-deep .ngx-pagination .pagination-previous a::before,
+:host ::ng-deep .ngx-pagination .pagination-previous span::before {
+  content: '<' !important;
+  display: inline-block !important;
+  font-size: 28px !important;
+  font-weight: 500 !important;
+  margin-right: 0 !important;
+  line-height: 1;
+}
+
+:host ::ng-deep .ngx-pagination .pagination-next a::after,
+:host ::ng-deep .ngx-pagination .pagination-next span::after {
+  content: '>' !important;
+  display: inline-block !important;
+  font-size: 28px !important;
+  font-weight: 500 !important;
+  margin-left: 0 !important;
+  line-height: 1;
+}
+
+:host ::ng-deep .ngx-pagination .pagination-previous a,
+:host ::ng-deep .ngx-pagination .pagination-next a,
+:host ::ng-deep .ngx-pagination .disabled {
+  min-width: 50px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+}

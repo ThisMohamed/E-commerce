@@ -1,0 +1,236 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-primary-600 to-emerald-600 text-white">
+    <div class="container mx-auto px-4 py-10">
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+              <i class="fa-solid fa-chart-pie text-xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold">{{ 'insights.title' | translate }}</h1>
+          </div>
+          <p class="text-white/80 text-sm font-medium">{{ 'insights.subtitle' | translate }}</p>
+        </div>
+
+        @if (hasData()) {
+          <div class="relative">
+            @if (showClearConfirm()) {
+              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                <span class="text-sm">{{ 'insights.clearConfirm' | translate }}</span>
+                <button
+                  (click)="clearAll()"
+                  class="cursor-pointer px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg font-medium transition"
+                >
+                  {{ 'insights.yes' | translate }}
+                </button>
+                <button
+                  (click)="showClearConfirm.set(false)"
+                  class="cursor-pointer px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-sm rounded-lg font-medium transition"
+                >
+                  {{ 'insights.no' | translate }}
+                </button>
+              </div>
+            } @else {
+              <button
+                (click)="showClearConfirm.set(true)"
+                class="cursor-pointer flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-medium transition backdrop-blur-sm"
+              >
+                <i class="fa-solid fa-trash-can"></i>
+                {{ 'insights.clearData' | translate }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 -mt-6">
+    @if (!hasData()) {
+      <!-- Empty State -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-12 text-center">
+        <div class="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fa-solid fa-chart-line text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ 'insights.empty.title' | translate }}</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">{{ 'insights.empty.message' | translate }}</p>
+        <a
+          routerLink="/shop"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium transition"
+        >
+          <i class="fa-solid fa-bag-shopping"></i>
+          {{ 'insights.empty.cta' | translate }}
+        </a>
+      </div>
+    } @else {
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <!-- Streak -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-orange-100 dark:bg-orange-900/20 rounded-bl-full opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-9 h-9 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-fire text-orange-500"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ streak() }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{{ 'insights.stats.streak' | translate }}</div>
+          </div>
+        </div>
+
+        <!-- Products Viewed -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-blue-100 dark:bg-blue-900/20 rounded-bl-full opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <i class="fa-regular fa-eye text-blue-500"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ uniqueViews() }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{{ 'insights.stats.viewed' | translate }}</div>
+          </div>
+        </div>
+
+        <!-- Total Views -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-purple-100 dark:bg-purple-900/20 rounded-bl-full opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-9 h-9 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-arrows-rotate text-purple-500"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalViews() }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{{ 'insights.stats.totalViews' | translate }}</div>
+          </div>
+        </div>
+
+        <!-- Added to Cart -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-bl-full opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-9 h-9 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-cart-shopping text-green-500"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ cartCount() }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{{ 'insights.stats.addedToCart' | translate }}</div>
+          </div>
+        </div>
+
+        <!-- Wishlisted -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 relative overflow-hidden col-span-2 lg:col-span-1">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-bl-full opacity-60"></div>
+          <div class="relative">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-9 h-9 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-heart text-red-500"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ wishlistCount() }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{{ 'insights.stats.wishlisted' | translate }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Top Categories Bar Chart -->
+        <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
+          <div class="flex items-center gap-2 mb-6">
+            <i class="fa-solid fa-chart-bar text-primary-600"></i>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ 'insights.topCategories.title' | translate }}</h3>
+          </div>
+
+          @if (topCategories().length > 0) {
+            <div class="space-y-4">
+              @for (cat of topCategories(); track cat.id; let i = $index) {
+                <div class="group">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <a
+                      [routerLink]="['/categories', cat.id]"
+                      class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary-600 transition"
+                    >
+                      {{ cat.name }}
+                    </a>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">{{ cat.count }}</span>
+                  </div>
+                  <div class="h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      class="h-full rounded-full transition-all duration-700 ease-out"
+                      [class]="barColor(i)"
+                      [style.width.%]="(cat.count / maxCategoryCount()) * 100"
+                    ></div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="text-gray-400 text-sm text-center py-8">{{ 'insights.topCategories.empty' | translate }}</p>
+          }
+        </div>
+
+        <!-- Top Searches -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
+          <div class="flex items-center gap-2 mb-6">
+            <i class="fa-solid fa-magnifying-glass text-primary-600"></i>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ 'insights.topSearches.title' | translate }}</h3>
+          </div>
+
+          @if (topSearches().length > 0) {
+            <div class="space-y-3">
+              @for (s of topSearches(); track s.query; let i = $index) {
+                <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <span class="w-7 h-7 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-lg flex items-center justify-center text-xs font-bold">
+                    {{ i + 1 }}
+                  </span>
+                  <span class="flex-1 text-sm font-medium text-gray-700 dark:text-gray-300 truncate">"{{ s.query }}"</span>
+                  <span class="text-xs text-gray-400 font-medium">{{ s.count }}x</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-8">
+              <i class="fa-solid fa-magnifying-glass text-3xl text-gray-300 dark:text-gray-600 mb-3"></i>
+              <p class="text-gray-400 text-sm">{{ 'insights.topSearches.empty' | translate }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Recently Viewed -->
+      @if (recentlyViewed().length > 0) {
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 mb-8">
+          <div class="flex items-center gap-2 mb-6">
+            <i class="fa-solid fa-clock-rotate-left text-primary-600"></i>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ 'insights.recentlyViewed.title' | translate }}</h3>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+            @for (item of recentlyViewed(); track item.productId) {
+              <a
+                [routerLink]="['/product-details', item.productId]"
+                class="group text-center"
+              >
+                <div class="aspect-square bg-gray-50 dark:bg-gray-700 rounded-xl overflow-hidden mb-2 p-2 group-hover:shadow-md transition">
+                  <img
+                    [src]="item.imageCover"
+                    [alt]="item.title"
+                    class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <p class="text-xs font-medium text-gray-700 dark:text-gray-300 line-clamp-2 group-hover:text-primary-600 transition">
+                  {{ item.title }}
+                </p>
+                <p class="text-xs font-bold text-primary-600 mt-1">{{ item.price }} {{ 'insights.currency' | translate }}</p>
+              </a>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

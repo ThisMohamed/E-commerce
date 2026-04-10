@@ -1,0 +1,85 @@
+<div class="min-h-screen bg-gray-50/50 dark:bg-gray-900">
+  <app-page-header
+    [title]="
+      isLoadingCategory() || !categoryDetails()
+        ? ('subcategories.loading' | translate)
+        : categoryDetails()!.name
+    "
+    [description]="'subcategories.description' | translate"
+    [breadcrumbs]="[
+      { label: ('subcategories.categories' | translate), link: '/categories' },
+      {
+        label:
+          isLoadingCategory() || !categoryDetails()
+            ? ('subcategories.loading' | translate)
+            : categoryDetails()!.name,
+      },
+    ]"
+    [imageUrl]="categoryDetails() ? categoryDetails()!.image : ''"
+    [iconClass]="'fa-solid fa-box-open'"
+  >
+  </app-page-header>
+  <div class="container px-4 py-10">
+    <a
+      class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 transition-colors mb-6 font-medium"
+      routerLink="/categories"
+    >
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>{{ 'subcategories.backToCategories' | translate }}</span>
+    </a>
+
+    @if (isLoadingSubCategories()) {
+      <app-loading-spinner [message]="'subcategories.loadingSub' | translate"></app-loading-spinner>
+    } @else {
+      @if (subCategoryList().length > 0) {
+        <div class="mb-6">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+            {{ subCategoryList().length }} {{ 'subcategories.countText' | translate }}
+            {{ categoryDetails()?.name }}
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          @for (subCategory of subCategoryList(); track subCategory._id) {
+            <a
+              class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-1"
+              [routerLink]="['/shop']"
+              [queryParams]="{ subcategory: subCategory._id }"
+            >
+              <div
+                class="w-14 h-14 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors"
+              >
+                <i class="fa-solid fa-folder-open text-2xl text-primary-600"></i>
+              </div>
+              <h3
+                class="font-bold text-gray-900 dark:text-white text-lg group-hover:text-primary-600 transition-colors mb-2"
+              >
+                {{ subCategory.name }}
+              </h3>
+              <div
+                class="flex items-center gap-2 text-sm text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity font-medium"
+              >
+                <span>{{ 'subcategories.browseProducts' | translate }}</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <app-empty-state
+          [iconClass]="'fa-solid fa-folder-open text-3xl text-gray-400'"
+          [title]="'subcategories.noSubFound' | translate"
+          [desc]="'subcategories.noSubDesc' | translate"
+        >
+          <a
+            class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+            [routerLink]="['/shop']"
+            [queryParams]="{ category: categoryDetails()?._id }"
+          >
+            {{ 'subcategories.viewAll' | translate }} {{ categoryDetails()?.name }}
+          </a>
+        </app-empty-state>
+      }
+    }
+  </div>
+</div>

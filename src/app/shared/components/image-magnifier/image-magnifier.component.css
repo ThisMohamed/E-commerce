@@ -1,0 +1,134 @@
+.magnifier-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.magnifier-main {
+  position: relative;
+  display: flex;
+  gap: 16px;
+}
+
+.image-container {
+  position: relative;
+  cursor: crosshair;
+  overflow: hidden;
+  border-radius: 12px;
+  flex: 1;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+}
+
+:host-context(.dark) .image-container {
+  background: #1f2937;
+}
+
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 420px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lens {
+  position: absolute;
+  border: 2px solid rgba(var(--color-primary-rgb, 22, 163, 74), 0.6);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: brightness(1.05);
+  z-index: 10;
+  transition: opacity 0.15s ease;
+}
+
+.zoom-panel {
+  position: absolute;
+  left: calc(100% + 16px);
+  top: 0;
+  width: 420px;
+  height: 420px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-repeat: no-repeat;
+  background-color: #fff;
+  z-index: 50;
+  border: 1px solid #e5e7eb;
+  pointer-events: none;
+  animation: zoomFadeIn 0.2s ease;
+}
+
+:host-context(.dark) .zoom-panel {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+@keyframes zoomFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.thumb-btn {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: all 0.25s ease;
+  padding: 4px;
+}
+
+:host-context(.dark) .thumb-btn {
+  background: #1f2937;
+}
+
+.thumb-btn:hover {
+  border-color: #9ca3af;
+}
+
+.thumb-btn.active {
+  border-color: var(--color-primary, #16a34a);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb, 22, 163, 74), 0.2);
+}
+
+.thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Hide zoom panel on small screens — not enough space */
+@media (max-width: 1024px) {
+  .lens,
+  .zoom-panel {
+    display: none;
+  }
+
+  .image-container {
+    cursor: default;
+  }
+}

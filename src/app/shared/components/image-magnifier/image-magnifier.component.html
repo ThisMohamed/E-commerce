@@ -1,0 +1,39 @@
+<div class="magnifier-wrapper">
+  <div class="magnifier-main">
+    <div
+      #imageContainer
+      class="image-container"
+      (mousemove)="onMouseMove($event)"
+      (mouseleave)="onMouseLeave()"
+    >
+      <img
+        [src]="selectedImage"
+        alt="Product image"
+        class="main-image"
+        draggable="false"
+      />
+
+      @if (isZooming()) {
+        <div class="lens" [style]="lensStyle"></div>
+      }
+    </div>
+
+    <!-- Zoom Result Panel -->
+    @if (isZooming()) {
+      <div class="zoom-panel" [style]="zoomPanelStyle"></div>
+    }
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="thumbnails">
+    @for (image of images(); track $index) {
+      <button
+        class="thumb-btn"
+        [class.active]="selectedIndex() === $index"
+        (click)="selectImage($index)"
+      >
+        <img [src]="image" alt="Thumbnail" draggable="false" />
+      </button>
+    }
+  </div>
+</div>

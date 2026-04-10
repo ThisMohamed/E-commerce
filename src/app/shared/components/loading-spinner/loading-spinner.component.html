@@ -1,0 +1,14 @@
+<div class="flex flex-col items-center justify-center" [class]="paddingY()">
+  @if (iconWithWrapper()) {
+    <div class="w-20 h-20 rounded-full bg-primary-50 flex items-center justify-center">
+      <i [class]="'fa-solid fa-spinner fa-spin animate-spin ' + iconColor() + ' ' + iconSize()">
+      </i>
+    </div>
+  } @else {
+    <i [class]="'fa-solid fa-spinner fa-spin animate-spin ' + iconColor() + ' ' + iconSize()"> </i>
+  }
+  <p class="text-gray-500 dark:text-gray-400 font-medium mt-4">{{ message() }}</p>
+  @if (subMessage()) {
+    <p class="text-gray-400 dark:text-gray-500 font-medium mt-1">{{ subMessage() }}</p>
+  }
+</div>

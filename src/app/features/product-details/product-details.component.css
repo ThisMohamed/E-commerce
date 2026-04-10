@@ -1,0 +1,33 @@
+.mySwiper2 swiper-slide img {
+  border: 4px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  height: 92px;
+  width: 125.5px;
+}
+
+.mySwiper2 swiper-slide:hover img {
+  border-color: #6a7282;
+}
+
+.mySwiper2 .swiper-slide-thumb-active img {
+  border-color: #6a7282 !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.mySwiper-liked-products::part(button-next),
+.mySwiper-liked-products::part(button-prev) {
+  color: var(--color-primary);
+  background-color: #fff;
+  width: 18px;
+  height: 18px;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00000071;
+  transition: all 0.4s;
+}
+.mySwiper-liked-products::part(button-next):hover,
+.mySwiper-liked-products::part(button-prev):hover {
+  transform: scale(1.1);
+}

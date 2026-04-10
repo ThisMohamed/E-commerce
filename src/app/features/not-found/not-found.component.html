@@ -1,0 +1,80 @@
+<div
+  class="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-center p-6 text-center font-sans relative overflow-hidden"
+>
+  <div
+    class="absolute inset-0 opacity-5 pointer-events-none select-none flex flex-wrap gap-20 p-10 justify-around"
+  >
+    <i class="fa-solid fa-apple-whole text-6xl"></i>
+    <i class="fa-solid fa-carrot text-6xl"></i>
+    <i class="fa-solid fa-leaf text-6xl"></i>
+  </div>
+
+  <div class="relative z-10 max-w-2xl w-full">
+    <div class="relative inline-flex flex-col items-center mb-10">
+      <div class="bg-white dark:bg-gray-800 p-12 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-gray-700 relative">
+        <svg class="w-20 h-20 text-[#2bb350]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          ></path>
+        </svg>
+
+        <div
+          class="absolute -top-3 -right-3 bg-[#2bb350] text-white font-bold w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-xl ring-4 ring-white"
+        >
+          404
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 mt-6">
+        <div class="w-1.5 h-1.5 rounded-full bg-green-200"></div>
+        <div class="w-6 h-2 rounded-full bg-[#2bb350]"></div>
+        <div class="w-1.5 h-1.5 rounded-full bg-green-200"></div>
+      </div>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
+      {{ 'notfoundPage.title' | translate }}
+    </h1>
+    <p class="text-slate-500 dark:text-gray-400 text-lg mb-12 max-w-md mx-auto leading-relaxed font-medium">
+      {{ 'notfoundPage.message' | translate }}
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+      <a
+        routerLink="/home"
+        class="inline-flex items-center justify-center gap-2 bg-[#2bb350] hover:bg-[#239441] text-white px-8 py-4 rounded-2xl font-bold transition-all duration-200 active:scale-95 shadow-lg shadow-green-100"
+      >
+        <i class="fa-solid fa-house"></i>
+        {{ 'notfoundPage.homeBtn' | translate }}
+      </a>
+    </div>
+
+    <div
+      class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-8 rounded-4xl border border-white dark:border-gray-700 shadow-sm max-w-xl mx-auto"
+    >
+      <h2 class="text-2xs font-black text-slate-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6">
+        {{ 'notfoundPage.popularDestinations' | translate }}
+      </h2>
+      <div class="flex flex-wrap justify-center gap-2.5">
+        <a
+          routerLink="/shop"
+          class="px-5 py-2.5 rounded-xl bg-green-50 dark:bg-green-900/30 text-[#2bb350] text-sm font-bold border border-green-100 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
+          >{{ 'notfoundPage.links.products' | translate }}</a
+        >
+        <a
+          routerLink="/categories"
+          class="px-5 py-2.5 rounded-xl bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-gray-300 text-sm font-semibold border border-slate-100 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-600 transition-colors"
+          >{{ 'notfoundPage.links.categories' | translate }}</a
+        >
+        <a
+          routerLink="/contact"
+          class="px-5 py-2.5 rounded-xl bg-slate-50 dark:bg-gray-700 text-slate-600 dark:text-gray-300 text-sm font-semibold border border-slate-100 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-600 transition-colors"
+          >{{ 'notfoundPage.links.contact' | translate }}</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

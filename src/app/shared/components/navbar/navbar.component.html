@@ -1,0 +1,593 @@
+<div class="hidden lg:block text-sm border-b border-gray-100 dark:border-gray-700 dark:bg-gray-900">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center h-10">
+      <div class="flex items-center gap-6 text-gray-500 dark:text-gray-400">
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-truck text-primary-600 text-xs"></i>
+          <span>{{ 'navbar.freeShipping' | translate }}</span>
+        </span>
+        <span class="flex items-center gap-2">
+          <i class="fa-solid fa-gift text-primary-600 text-xs"></i>
+          <span>{{ 'navbar.newArrivals' | translate }}</span>
+        </span>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400">
+          <a
+            href="tel:+18001234567"
+            class="flex items-center gap-1.5 hover:text-primary-600 transition-colors"
+          >
+            <i class="fa-solid fa-phone text-xs"></i>
+            <span>+1 (800) 123-4567</span>
+          </a>
+          <a
+            href="mailto:support@freshcart.com"
+            class="flex items-center gap-1.5 hover:text-primary-600 transition-colors"
+          >
+            <i class="fa-regular fa-envelope text-xs"></i>
+            <span>support@freshcart.com</span>
+          </a>
+        </div>
+        <span class="w-px h-4 bg-gray-200 dark:bg-gray-700"></span>
+
+        @if (isLoggedIn()) {
+          <div class="flex items-center gap-4">
+            <a
+              class="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-colors"
+              routerLink="/profile"
+            >
+              <i class="fa-regular fa-user text-xs"></i>
+              <span>{{ LoggedInUser()?.name }}</span>
+            </a>
+            <button
+              (click)="logOut()"
+              class="cursor-pointer flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors"
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+              <span>{{ 'navbar.signOut' | translate }}</span>
+            </button>
+          </div>
+        } @else {
+          <div class="flex items-center gap-4">
+            <a
+              class="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-colors"
+              routerLink="/login"
+            >
+              <i class="fa-regular fa-user text-xs"></i>
+              <span>{{ 'navbar.signIn' | translate }}</span>
+            </a>
+            <a
+              class="flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-colors"
+              routerLink="/signup"
+            >
+              <i class="fa-solid fa-user text-xs"></i>
+              <span>{{ 'navbar.signUp' | translate }}</span>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<header class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow-sm sticky top-0 z-40">
+  <div class="container px-4 py-2 flex items-center justify-between gap-4">
+    <a class="shrink-0" routerLink="/home">
+      <img
+        alt="FreshCart"
+        width="160"
+        height="31"
+        class="h-6 lg:h-8 w-auto dark:brightness-200"
+        src="assets/fresh-logo.svg"
+      />
+    </a>
+    <form (submit)="onSearch($event)" class="hidden lg:flex flex-1 max-w-2xl group mx-4">
+      <div class="relative w-full">
+        <input
+          [value]="searchText()"
+          (input)="searchText.set($any($event.target).value)"
+          type="text"
+          class="w-full px-5 py-3 pr-12 rounded-full border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm dark:placeholder-gray-400"
+          [placeholder]="isListening() ? ('navbar.listening' | translate) : ('navbar.searchPlaceholder' | translate)"
+        />
+        <button
+          type="submit"
+          class="absolute right-2 top-1.5 bg-[#0aad0a] text-white size-7 rounded-full flex items-center justify-center"
+        >
+          <i class="fa-solid fa-magnifying-glass text-2xs"></i>
+        </button>
+      </div>
+    </form>
+
+    <nav class="hidden xl:flex items-center gap-6">
+      <ul class="flex items-center gap-6">
+        <li>
+          <a
+            routerLink="/home"
+            routerLinkActive="text-primary-600"
+            class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition-colors"
+          >
+            {{ 'navbar.home' | translate }}
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/shop"
+            routerLinkActive="text-primary-600"
+            class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition-colors"
+            >{{ 'navbar.shop' | translate }}</a
+          >
+        </li>
+        <li class="relative group py-4">
+          <a
+            class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium gap-1 transition-colors cursor-pointer"
+          >
+            {{ 'navbar.categories' | translate }}
+            <i
+              class="fa-solid fa-chevron-down text-2xs group-hover:rotate-180 transition-transform"
+            ></i>
+          </a>
+          <div
+            class="absolute top-full left-0 w-52 bg-white dark:bg-gray-800 shadow-xl rounded-xl border border-gray-100 dark:border-gray-700 py-2 hidden group-hover:block z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+          >
+            <a
+              routerLink="/categories"
+              class="block px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >{{ 'navbar.allCategories' | translate }}</a
+            >
+            <a
+              [routerLink]="['/shop']"
+              [queryParams]="{ category: '6439d2d167d9aa4ca970649f' }"
+              class="block px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >{{ 'navbar.electronics' | translate }}</a
+            >
+            <a
+              [routerLink]="['/shop']"
+              [queryParams]="{ category: '6439d58a0049ad0b52b9003f' }"
+              class="block px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >{{ 'navbar.womenFashion' | translate }}</a
+            >
+            <a
+              [routerLink]="['/shop']"
+              [queryParams]="{ category: '6439d5b90049ad0b52b90048' }"
+              class="block px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >{{ 'navbar.menFashion' | translate }}</a
+            >
+            <a
+              [routerLink]="['/shop']"
+              [queryParams]="{ category: '6439d30b67d9aa4ca97064b1' }"
+              class="block px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >{{ 'navbar.beautyHealth' | translate }}</a
+            >
+          </div>
+        </li>
+        <li>
+          <a
+            routerLink="/brands"
+            routerLinkActive="text-primary-600"
+            class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium transition-colors"
+            >{{ 'navbar.brands' | translate }}</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1 lg:gap-2">
+      <a
+        routerLink="/contact"
+        class="hidden lg:flex items-center gap-2 pr-3 mr-2 border-r border-gray-200 dark:border-gray-600 hover:opacity-80 transition-opacity"
+      >
+        <div
+          class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-[#0aad0a]"
+        >
+          <i class="fa-solid fa-headset text-lg"></i>
+        </div>
+        <div class="text-xs">
+          <div class="text-gray-400">{{ 'navbar.support' | translate }}</div>
+          <div class="font-semibold text-gray-700 dark:text-gray-200">{{ 'navbar.help24' | translate }}</div>
+        </div>
+      </a>
+
+      @if (voiceSupported()) {
+        <button
+          type="button"
+          (click)="isListening() ? stopVoiceSearch() : startVoiceSearch()"
+          [title]="isListening() ? ('navbar.stopListening' | translate) : ('navbar.voiceSearch' | translate)"
+          class="cursor-pointer p-2.5 rounded-full transition-colors"
+          [class]="isListening() ? 'bg-red-500 text-white voice-listening' : 'text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'"
+        >
+          <i [class]="isListening() ? 'fa-solid fa-stop text-xl' : 'fa-solid fa-microphone text-xl'"></i>
+        </button>
+      }
+
+      <!-- Dark mode toggle -->
+      <button
+        (click)="themeService.toggleTheme()"
+        class="cursor-pointer p-2.5 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        [title]="themeService.isDark() ? ('navbar.lightMode' | translate) : ('navbar.darkMode' | translate)"
+      >
+        @if (themeService.isDark()) {
+          <i class="fa-solid fa-sun text-xl text-amber-400"></i>
+        } @else {
+          <i class="fa-solid fa-moon text-xl"></i>
+        }
+      </button>
+
+      <a
+        routerLink="/wishlist"
+        routerLinkActive="text-primary-600"
+        class="relative p-2.5 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hover:text-primary-600"
+        [title]="'navbar.wishlist' | translate"
+      >
+        <i class="fa-regular fa-heart text-xl"></i>
+        @if (isLoggedIn()) {
+          <span
+            class="absolute top-0.5 right-0.5 size-4.5 rounded-full bg-red-600 text-white text-2xs font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
+            >{{ numOfWishlistItems() }}</span
+          >
+        }
+      </a>
+      <a
+        routerLink="/cart"
+        routerLinkActive="text-primary-600"
+        class="relative p-2.5 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 transition-colors"
+        [title]="'navbar.cart' | translate"
+      >
+        <i class="fa-solid fa-cart-shopping text-xl"></i>
+        @if (isLoggedIn()) {
+          <span
+            class="absolute top-0.5 right-0.5 size-4.5 rounded-full bg-primary-600 text-white text-2xs font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
+            >{{ numOfCartItems() }}</span
+          >
+        }
+      </a>
+
+      <div class="relative group p-2 border border-gray-300/60 dark:border-gray-600 rounded hidden lg:block">
+        <button
+          class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium gap-1 transition-colors cursor-pointer"
+        >
+          {{ currentLang() }}
+          <i
+            class="fa-solid fa-chevron-down text-2xs group-hover:rotate-180 transition-transform"
+          ></i>
+        </button>
+        <div
+          class="absolute top-full left-0 w-30 bg-white dark:bg-gray-800 shadow-xl rounded-xl border border-gray-100 dark:border-gray-700 py-2 hidden group-hover:block z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <button
+            (click)="changeLanguage('ar')"
+            class="cursor-pointer text-start w-full px-4 py-2.5 text-gray-800 dark:text-gray-200 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {{ 'navbar.arabic' | translate }}
+          </button>
+          <button
+            (click)="changeLanguage('en')"
+            class="cursor-pointer text-start w-full px-4 py-2.5 text-gray-800 dark:text-gray-200 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {{ 'navbar.english' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <button
+        (click)="toggleMenu()"
+        class="p-2 ms-2 lg:hidden transition-transform cursor-pointer size-10 rounded-full bg-primary-700 text-white"
+      >
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      @if (isLoggedIn()) {
+        <div class="hidden lg:block relative">
+          <button
+            (click)="toggleProfileMenu()"
+            class="cursor-pointer p-2.5 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hover:text-primary-600 group"
+          >
+            <i class="fa-regular fa-circle-user text-xl"></i>
+          </button>
+          <div
+            class="absolute inset-e-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl transition-all duration-200 origin-top-right"
+            [class.opacity-100]="profileMenu()"
+            [class.scale-100]="profileMenu()"
+            [class.visible]="profileMenu()"
+            [class.opacity-0]="!profileMenu()"
+            [class.scale-95]="!profileMenu()"
+            [class.invisible]="!profileMenu()"
+          >
+            <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                  <i class="fa-regular fa-circle-user text-xl text-primary-600"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
+                    {{ LoggedInUser()?.name }}
+                  </p>
+                  <p class="text-xs text-gray-400 truncate font-medium">
+                    {{ LoggedInUser()?.email }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="py-2 font-medium">
+              <a
+                routerLink="/allorders"
+                (click)="closeProfileMenu()"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <i class="fa-solid fa-box-open w-4 text-gray-400"></i
+                ><span>{{ 'navbar.myOrders' | translate }}</span>
+              </a>
+              <a
+                routerLink="/wishlist"
+                (click)="closeProfileMenu()"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <i class="fa-regular fa-heart w-4 text-gray-400"></i
+                ><span>{{ 'navbar.myWishlist' | translate }}</span>
+              </a>
+               <a
+                routerLink="/insights"
+                (click)="closeProfileMenu()"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <i class="fa-solid fa-chart-pie w-4 text-gray-400"></i
+                ><span>{{ 'navbar.myInsights' | translate }}</span>
+              </a>
+              <a
+                routerLink="/profile/settings"
+                (click)="closeProfileMenu()"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <i class="fa-solid fa-gear w-4 text-gray-400"></i
+                ><span>{{ 'navbar.settings' | translate }}</span>
+              </a>
+
+            </div>
+            <div class="border-t border-gray-100 dark:border-gray-700 py-2">
+              <button
+                (click)="logOut()"
+                (click)="closeProfileMenu()"
+                class="flex items-center cursor-pointer gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full text-left font-medium"
+              >
+                <i class="fa-solid fa-right-from-bracket w-4"></i
+                ><span>{{ 'navbar.signOut' | translate }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <a
+          routerLink="/login"
+          class="hidden lg:flex items-center gap-2 ml-2 px-5 py-2.5 rounded-full bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors shadow-sm shadow-primary-600/20"
+        >
+          <i class="fa-regular fa-user"></i> {{ 'navbar.signIn' | translate }}
+        </a>
+      }
+    </div>
+  </div>
+</header>
+
+<div
+  class="fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 lg:opacity-0"
+  [class.opacity-100]="isMenuOpen()"
+  [class.opacity-0]="!isMenuOpen()"
+  [class.pointer-events-none]="!isMenuOpen()"
+  (click)="toggleMenu()"
+></div>
+
+<aside
+  class="fixed lg:translate-x-full right-0 top-0 h-full w-77.5 bg-white dark:bg-gray-800 z-60 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col font-['Exo']"
+  [class.translate-x-0]="isMenuOpen()"
+  [class.translate-x-full]="!isMenuOpen()"
+>
+  <div class="p-5 flex items-center justify-between border-b border-gray-100 dark:border-gray-700">
+    <img src="assets/fresh-logo.svg" class="h-6 dark:brightness-200" alt="Logo" />
+    <div class="flex items-center gap-2">
+      @if (voiceSupported()) {
+        <button
+          type="button"
+          (click)="isListening() ? stopVoiceSearch() : startVoiceSearch()"
+          [title]="isListening() ? ('navbar.stopListening' | translate) : ('navbar.voiceSearch' | translate)"
+          class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+          [class]="isListening() ? 'bg-red-500 text-white voice-listening' : 'bg-gray-50 dark:bg-gray-700 text-gray-400 dark:text-gray-300 hover:bg-gray-100'"
+        >
+          <i [class]="isListening() ? 'fa-solid fa-stop text-sm' : 'fa-solid fa-microphone text-sm'"></i>
+        </button>
+      }
+      <button
+        (click)="toggleMenu()"
+        class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700 text-gray-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+      >
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+  </div>
+
+  <form (submit)="onSearch($event)" class="p-4 border-b border-gray-100 dark:border-gray-700">
+    <div class="relative">
+      <input
+        [value]="searchText()"
+        (input)="searchText.set($any($event.target).value)"
+        type="text"
+        class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-3 pr-12 text-sm outline-none focus:ring-1 focus:ring-[#0aad0a] dark:text-white dark:placeholder-gray-400"
+        [placeholder]="isListening() ? ('navbar.listening' | translate) : ('navbar.searchMobilePlaceholder' | translate)"
+      />
+      <button
+        type="submit"
+        class="absolute right-2 top-2 bg-[#0aad0a] text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
+      >
+        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+      </button>
+    </div>
+  </form>
+
+  <nav class="overflow-y-auto p-4 space-y-1">
+    <a
+      routerLink="/home"
+      (click)="toggleMenu()"
+      class="block py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-[#0aad0a] font-medium transition-all"
+      >{{ 'navbar.home' | translate }}</a
+    >
+    <a
+      routerLink="/shop"
+      (click)="toggleMenu()"
+      class="block py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-[#0aad0a] font-medium transition-all"
+      >{{ 'navbar.shop' | translate }}</a
+    >
+    <a
+      routerLink="/categories"
+      (click)="toggleMenu()"
+      class="block py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-[#0aad0a] font-medium transition-all"
+      >{{ 'navbar.categories' | translate }}</a
+    >
+    <a
+      routerLink="/brands"
+      (click)="toggleMenu()"
+      class="block py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-[#0aad0a] font-medium transition-all"
+      >{{ 'navbar.brands' | translate }}</a
+    >
+    <a
+      routerLink="/insights"
+      (click)="toggleMenu()"
+      class="block py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 hover:text-[#0aad0a] font-medium transition-all"
+      ><i class="fa-solid fa-chart-pie text-xs mr-1.5"></i>{{ 'navbar.myInsights' | translate }}</a
+    >
+
+    <!-- Dark mode toggle (mobile) -->
+    <button
+      (click)="themeService.toggleTheme()"
+      class="cursor-pointer flex items-center justify-between w-full py-3 px-4 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-gray-700 font-medium transition-all"
+    >
+      <span class="flex items-center gap-3">
+        @if (themeService.isDark()) {
+          <i class="fa-solid fa-sun text-amber-400"></i>
+        } @else {
+          <i class="fa-solid fa-moon"></i>
+        }
+        {{ themeService.isDark() ? ('navbar.lightMode' | translate) : ('navbar.darkMode' | translate) }}
+      </span>
+    </button>
+
+    <div class="pt-6 mt-4 border-t border-gray-50 dark:border-gray-700 space-y-4">
+      <a
+        routerLink="/wishlist"
+        (click)="toggleMenu()"
+        class="flex items-center justify-between px-4 text-gray-700 dark:text-gray-200 font-medium hover:bg-green-50 dark:hover:bg-gray-700 py-3 transition rounded"
+      >
+        <span class="flex items-center gap-3"
+          ><i class="fa-regular fa-heart text-red-500"></i>
+          {{ 'navbar.wishlist' | translate }}</span
+        >
+        <span class="bg-red-500 text-white text-[11px] px-2.5 py-1 rounded-full font-bold">{{
+          numOfWishlistItems()
+        }}</span>
+      </a>
+      <a
+        routerLink="/cart"
+        (click)="toggleMenu()"
+        class="flex items-center justify-between px-4 text-gray-700 dark:text-gray-200 font-medium hover:bg-green-50 dark:hover:bg-gray-700 py-3 transition rounded"
+      >
+        <span class="flex items-center gap-3"
+          ><i class="fa-solid fa-cart-shopping text-[#0aad0a]"></i>
+          {{ 'navbar.cart' | translate }}</span
+        >
+        <span class="bg-[#0aad0a] text-white text-[11px] px-2.5 py-1 rounded-full font-bold">{{
+          numOfCartItems()
+        }}</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50">
+    @if (isLoggedIn()) {
+      <div class="space-y-1 mb-5">
+        <a
+          (click)="toggleMenu()"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+          routerLink="/profile"
+        >
+          <div class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <i class="fa-regular fa-user text-gray-500 dark:text-gray-400"></i>
+          </div>
+          <span class="font-medium text-gray-700 dark:text-gray-200"> {{ LoggedInUser()?.name }} </span>
+        </a>
+        <button
+          (click)="logOut()"
+          (click)="toggleMenu()"
+          class="cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full text-left"
+        >
+          <div class="w-9 h-9 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
+            <i class="fa-solid fa-arrow-right-from-bracket text-red-500"></i>
+          </div>
+          <span class="font-medium text-red-600">{{ 'navbar.signOut' | translate }}</span>
+        </button>
+      </div>
+    } @else {
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <button
+          (click)="toggleMenu()"
+          routerLink="/login"
+          class="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+        >
+          {{ 'navbar.signIn' | translate }}
+        </button>
+        <button
+          (click)="toggleMenu()"
+          routerLink="/signup"
+          class="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-primary-600 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+        >
+          {{ 'navbar.signUp' | translate }}
+        </button>
+      </div>
+    }
+
+    <div class="relative block p-3 mb-6 border rounded border-primary-300/60 dark:border-gray-600">
+      <button
+        (click)="toggleLangDropDown()"
+        class="text-gray-700 dark:text-gray-200 hover:text-primary-600 font-medium gap-1 transition-colors cursor-pointer flex items-center w-full justify-between"
+      >
+        {{ currentLang() }}
+        <i
+          class="fa-solid fa-chevron-down text-2xs transition-transform"
+          [class.rotate-180]="isOpenlangDropDown()"
+        ></i>
+      </button>
+      @if (isOpenlangDropDown()) {
+        <div
+          class="absolute top-full inset-x-0 bg-white dark:bg-gray-800 shadow-xl rounded-xl border border-gray-100 dark:border-gray-700 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <button
+            (click)="changeLanguage('ar')"
+            class="cursor-pointer text-start w-full px-4 py-2.5 text-gray-800 dark:text-gray-200 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {{ 'navbar.arabic' | translate }}
+          </button>
+          <button
+            (click)="changeLanguage('en')"
+            class="cursor-pointer text-start w-full px-4 py-2.5 text-gray-800 dark:text-gray-200 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {{ 'navbar.english' | translate }}
+          </button>
+        </div>
+      }
+    </div>
+
+    <a
+      routerLink="/contact"
+      (click)="toggleMenu()"
+      class="bg-white dark:bg-gray-700 rounded-2xl p-4 flex items-center gap-4 border border-gray-100 dark:border-gray-600 shadow-sm hover:bg-primary-50 dark:hover:bg-gray-600 transition-colors"
+    >
+      <div
+        class="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-[#0aad0a]"
+      >
+        <i class="fa-solid fa-headset text-lg"></i>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">{{ 'navbar.needHelp' | translate }}</p>
+        <p class="text-sm text-primary-600 font-medium">
+          {{ 'navbar.contactSupport' | translate }}
+        </p>
+      </div>
+    </a>
+  </div>
+</aside>

@@ -1,0 +1,194 @@
+<div class="min-h-screen bg-gray-50/50 dark:bg-gray-900">
+  @if (isLoadingWishlist()) {
+    <app-loading-spinner
+      [paddingY]="'py-32'"
+      [iconSize]="'text-3xl'"
+      [message]="'wishlist.loading' | translate"
+    ></app-loading-spinner>
+  } @else {
+    @if (wishList().length > 0) {
+      <div class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8">
+          <nav class="flex items-center gap-2 text-sm text-gray-500 mb-4">
+            <a class="hover:text-primary-600 transition-colors font-medium" routerLink="/home">{{
+              'wishlist.breadcrumb.home' | translate
+            }}</a>
+            <span>/</span>
+            <span class="text-gray-900 dark:text-white font-medium">{{
+              'wishlist.breadcrumb.title' | translate
+            }}</span>
+          </nav>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="size-12 rounded-xl bg-red-50 flex items-center justify-center">
+                <i class="fa-solid fa-heart text-xl text-red-500"></i>
+              </div>
+              <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ 'wishlist.title' | translate }}</h1>
+                <p class="text-gray-500 text-sm font-medium">
+                  {{ wishList().length }} {{ 'wishlist.itemsSaved' | translate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container px-4 py-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+          <div
+            class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 text-sm font-medium text-gray-500 dark:text-gray-300"
+          >
+            <div class="col-span-6">{{ 'wishlist.table.product' | translate }}</div>
+            <div class="col-span-2 text-center">{{ 'wishlist.table.price' | translate }}</div>
+            <div class="col-span-2 text-center">{{ 'wishlist.table.status' | translate }}</div>
+            <div class="col-span-2 text-center">{{ 'wishlist.table.actions' | translate }}</div>
+          </div>
+          <div class="divide-y divide-gray-100 dark:divide-gray-700">
+            @for (product of wishList(); track product._id) {
+              <div
+                class="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 md:px-6 md:py-5 items-center hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors"
+              >
+                <div class="md:col-span-6 flex items-center gap-4">
+                  <a
+                    class="size-20 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 overflow-hidden shrink-0"
+                    [routerLink]="['/product-details', product._id]"
+                  >
+                    <img
+                      [alt]="product.title"
+                      class="w-full h-full object-contain p-2"
+                      [src]="product.imageCover"
+                    />
+                  </a>
+                  <div class="min-w-0">
+                    <a
+                      class="font-medium text-gray-900 dark:text-gray-100 hover:text-primary-600 transition-colors line-clamp-2"
+                      [routerLink]="['/product-details', product._id]"
+                    >
+                      {{ product.title }}
+                    </a>
+                    <p class="text-sm text-gray-400 mt-1 font-medium">
+                      {{ product.category.name | translateCategory }}
+                    </p>
+                  </div>
+                </div>
+                <div class="md:col-span-2 flex md:justify-center items-center gap-2">
+                  <span class="md:hidden text-sm text-gray-500 dark:text-gray-400"
+                    >{{ 'wishlist.table.priceLabel' | translate }}:</span
+                  >
+                  <div class="text-right md:text-center">
+                    @if (product.priceAfterDiscount) {
+                      <div class="font-semibold text-gray-900 dark:text-white">
+                        {{ product.priceAfterDiscount }} {{ 'wishlist.currency' | translate }}
+                      </div>
+                      <div class="text-sm text-gray-400 line-through font-medium">
+                        {{ product.price }} {{ 'wishlist.currency' | translate }}
+                      </div>
+                    } @else {
+                      <div class="font-semibold text-gray-900 dark:text-white">
+                        {{ product.price }} {{ 'wishlist.currency' | translate }}
+                      </div>
+                    }
+                  </div>
+                </div>
+                <div class="md:col-span-2 flex md:justify-center">
+                  <span class="md:hidden text-sm text-gray-500 dark:text-gray-400 mr-2"
+                    >{{ 'wishlist.table.statusLabel' | translate }}:</span
+                  >
+
+                  @if (isInCart(product._id)) {
+                    <span
+                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400"
+                    >
+                      <i class="fa-solid fa-cart-shopping text-2xs"></i>
+                      {{ 'wishlist.status.inCart' | translate }}
+                    </span>
+                  } @else {
+                    <span
+                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                    >
+                      <span class="size-1.5 rounded-full bg-green-500"></span
+                      >{{ 'wishlist.status.inStock' | translate }}
+                    </span>
+                  }
+                </div>
+                <div class="md:col-span-2 flex items-center gap-2 md:justify-center">
+                  @if (isInCart(product._id)) {
+                    <a
+                      class="flex-1 md:flex-none rounded inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
+                      routerLink="/cart"
+                    >
+                      <i class="fa-solid fa-check text-xs text-green-600"></i>
+                      <span class="md:hidden lg:inline">{{
+                        'wishlist.actions.viewCart' | translate
+                      }}</span>
+                    </a>
+                  } @else {
+                    <button
+                      (click)="addProductToCart(product._id)"
+                      [disabled]="product._id === productIdAddToCart()"
+                      class="cursor-pointer flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded text-sm font-medium transition-all bg-primary-600 text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      @if (product._id === productIdAddToCart()) {
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span class="md:hidden lg:inline">{{
+                          'wishlist.actions.adding' | translate
+                        }}</span>
+                      } @else {
+                        <i class="fa-solid fa-cart-shopping text-xs"></i>
+                        <span class="md:hidden lg:inline">{{
+                          'wishlist.actions.addToCart' | translate
+                        }}</span>
+                      }
+                    </button>
+                  }
+
+                  <button
+                    [disabled]="removingProductId() == product._id"
+                    (click)="removeProductFromWishList(product._id)"
+                    class="w-10 h-10 cursor-pointer rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 dark:hover:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                    [title]="'wishlist.actions.remove' | translate"
+                  >
+                    @if (removingProductId() == product._id) {
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                      <i class="fa-solid fa-trash text-sm"></i>
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="mt-8 flex items-center justify-between">
+          <a
+            class="text-gray-500 dark:text-gray-400 hover:text-primary-600 text-sm font-medium transition-colors"
+            routerLink="/shop"
+          >
+            <i class="fa-solid fa-arrow-left"></i> {{ 'wishlist.continueShopping' | translate }}</a
+          >
+        </div>
+      </div>
+    } @else {
+      <div class="container px-4 py-20">
+        <app-empty-state
+          [containerClass]="'max-w-sm mx-auto'"
+          [iconClass]="'fa-regular fa-heart text-3xl text-gray-400'"
+          [title]="'wishlist.empty.title' | translate"
+          [titleClass]="'text-xl'"
+          [desc]="'wishlist.empty.desc' | translate"
+          [descClass]="'text-sm'"
+          [iconWrapperClass]="'bg-gray-100 size-20 rounded-2xl'"
+        >
+          <div class="flex flex-col gap-3 mt-6">
+            <a
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+              routerLink="/shop"
+              >{{ 'wishlist.empty.browse' | translate }}
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+          </div>
+        </app-empty-state>
+      </div>
+    }
+  }
+</div>

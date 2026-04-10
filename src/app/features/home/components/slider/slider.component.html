@@ -1,0 +1,162 @@
+@if (isBrowser()) {
+  @if (direction() == 'rtl') {
+    <swiper-container
+      loop="true"
+      [pagination]="{ clickable: true }"
+      class="mySwiper"
+      navigation="true"
+      dir="rtl"
+    >
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-10 pe-6 md:ps-28 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide1.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide1.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-green-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide1.btnShop' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide1.btnDeals' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-10 pe-6 md:ps-28 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide2.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide2.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-blue-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide2.btnShop' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide2.btnLearn' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-15 pe-6 md:ps-30 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide3.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide3.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-purple-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide3.btnOrder' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide3.btnInfo' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  } @else {
+    <swiper-container
+      loop="true"
+      [pagination]="{ clickable: true }"
+      class="mySwiper"
+      navigation="true"
+    >
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-10 pe-6 md:ps-28 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide1.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide1.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-green-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide1.btnShop' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide1.btnDeals' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-10 pe-6 md:ps-28 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide2.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide2.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-blue-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide2.btnShop' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide2.btnLearn' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="h-100 flex items-center item">
+          <div class="w-full ps-10 pe-6 md:ps-28 md:pe-20 text-white space-y-4">
+            <h2 class="text-white text-3xl font-bold mb-4 max-w-96">
+              {{ 'homeSlider.slide3.title' | translate }}
+            </h2>
+            <p class="font-medium">{{ 'homeSlider.slide3.subtitle' | translate }}</p>
+            <div class="flex gap-2 flex-wrap">
+              <a
+                routerLink="/shop"
+                class="cursor-pointer bg-white border-2 border-white/50 text-purple-500 inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide3.btnOrder' | translate }}
+              </a>
+              <a
+                class="cursor-pointer bg-transparent border-2 border-white/50 text-white inline-block px-6 py-2 rounded font-semibold hover:scale-105 transition-transform"
+              >
+                {{ 'homeSlider.slide3.btnInfo' | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  }
+}

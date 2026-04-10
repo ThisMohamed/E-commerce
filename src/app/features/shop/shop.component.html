@@ -1,0 +1,112 @@
+<div class="min-h-screen bg-gray-50/50 dark:bg-gray-900">
+  <app-page-header
+    [title]="headerData().title"
+    [description]="headerData().subtitle"
+    [breadcrumbs]="breadcrumb()"
+    [imageUrl]="headerData().image"
+    [iconClass]="'fa-solid fa-box-open'"
+  >
+  </app-page-header>
+
+  @if (currentFilters().category || currentFilters().brand || currentFilters().subcategory) {
+    <div class="container px-4 pt-8 flex items-center gap-3 flex-wrap">
+      <div class="flex items-center gap-2 text-gray-500 dark:text-gray-400 font-medium border-e pe-3 border-gray-300 dark:border-gray-600">
+        <i class="fa-solid fa-filter text-xs"></i>
+        <span class="text-sm">{{ 'shop.activeFilters' | translate }}:</span>
+      </div>
+      <a
+        [class]="{
+          'bg-violet-100': currentFilters().brand,
+          'text-violet-700': currentFilters().brand,
+          'hover:bg-violet-200': currentFilters().brand,
+          'bg-primary-100': !currentFilters().brand,
+          'text-primary-700': !currentFilters().brand,
+          'hover:bg-primary-200': !currentFilters().brand,
+        }"
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer"
+        routerLink="/shop"
+      >
+        <i class="fa-solid fa-layer-group text-xs"></i>
+        {{ headerData().title }}
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </a>
+
+      <a class="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline font-medium" routerLink="/shop">
+        {{ 'shop.clearAll' | translate }}
+      </a>
+    </div>
+  }
+
+  @if (isLoadingProducts()) {
+    <div class="container mx-auto px-4 py-8">
+      <app-loading-spinner [message]="'shop.loading' | translate"></app-loading-spinner>
+    </div>
+  } @else {
+    <div class="container px-4 py-8">
+      <div class="mb-6 text-sm text-gray-500 dark:text-gray-400 font-medium">
+        {{ 'shop.showing' | translate: { count: productsList().length } }}
+      </div>
+
+      @if (productsList().length > 0) {
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+        >
+          @for (
+            product of productsList()
+              | paginate
+                : {
+                    id: 'foo',
+                    itemsPerPage: pageSize(),
+                    currentPage: currPage(),
+                    totalItems: total(),
+                  };
+            track product._id
+          ) {
+            <app-product-card [product]="product"></app-product-card>
+          }
+        </div>
+
+        @if (total() > pageSize()) {
+          <div class="flex items-center justify-center pt-5">
+            <pagination-controls
+              (pageChange)="getProductsData($event)"
+              id="foo"
+              [maxSize]="9"
+              [directionLinks]="true"
+              [autoHide]="true"
+              [responsive]="true"
+              previousLabel=""
+              nextLabel=""
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+            >
+            </pagination-controls>
+          </div>
+        }
+      } @else {
+        @if (currentFilters().category || currentFilters().brand || currentFilters().subcategory) {
+          <app-empty-state
+            [iconClass]="'fa-solid fa-box-open text-3xl text-gray-400'"
+            [title]="'shop.noProducts' | translate"
+            [desc]="'shop.noProductsFilters' | translate"
+          >
+            <a
+              class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+              routerLink="/shop"
+            >
+              {{ 'shop.viewAll' | translate }}
+            </a>
+          </app-empty-state>
+        } @else {
+          <app-empty-state
+            [iconClass]="'fa-solid fa-box-open text-3xl text-gray-400'"
+            [title]="'shop.noProducts' | translate"
+            [desc]="'shop.noProductsAvailable' | translate"
+          >
+          </app-empty-state>
+        }
+      }
+    </div>
+  }
+</div>

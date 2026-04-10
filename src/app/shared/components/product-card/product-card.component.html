@@ -1,0 +1,147 @@
+<div
+  class="h-full product-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded overflow-hidden hover:shadow-lg transition duration-300 hover:-translate-y-1"
+>
+  <div class="relative">
+    <img [src]="product().imageCover" alt="" class="h-60 w-full object-contain" />
+
+    @if (product().priceAfterDiscount) {
+      <div class="absolute top-3 left-3">
+        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-md"
+          >{{ calcDiscountPercentage() }} %</span
+        >
+      </div>
+    }
+
+    <div class="absolute top-3 right-3 flex flex-col space-y-2">
+      @if (isInWishList(product()._id)) {
+        <button
+          (click)="removeProductFromWishlist(product()._id)"
+          [disabled]="isRemovingProductFromWishlist()"
+          class="bg-white dark:bg-gray-700 cursor-pointer h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm text-red-500 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-70"
+          [title]="'product.removeFromWishlist' | translate"
+          tabindex="0"
+          style="transform: none"
+        >
+          @if (isRemovingProductFromWishlist()) {
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          } @else {
+            <i class="fa-solid fa-heart"></i>
+          }
+        </button>
+      } @else {
+        <button
+          (click)="addProductToWishlist(product()._id)"
+          [disabled]="isAddingProductToWishlist()"
+          class="bg-white dark:bg-gray-700 cursor-pointer h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm text-gray-600 dark:text-gray-300 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-70"
+          [title]="'product.addToWishlist' | translate"
+          tabindex="0"
+          style="transform: none"
+        >
+          @if (isAddingProductToWishlist()) {
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          } @else {
+            <i class="fa-regular fa-heart"></i>
+          }
+        </button>
+      }
+
+      
+      <a
+        [routerLink]="['/product-details', product()._id]"
+        class="bg-white dark:bg-gray-700 h-8 w-8 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary-600 shadow-sm"
+      >
+        <i class="fa-regular fa-eye"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="product-info p-4">
+    <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ product().category.name | translateCategory }}</div>
+    <h3 class="font-medium text-gray-700 dark:text-gray-200 mb-1 cursor-pointer">
+      <a [routerLink]="['/product-details', product()._id]" class="line-clamp-2">
+        {{ product().title }}
+      </a>
+    </h3>
+
+    <div class="flex items-center mb-2">
+      <div class="flex flex-wrap text-amber-400 mr-2">
+        @for (num of stars(); track num) {
+          @if (product().ratingsAverage >= num) {
+            <svg
+              width="20"
+              height="17"
+              viewBox="0 0 20 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.6718 0.409375C10.5437 0.159375 10.2843 0 10.0031 0C9.72183 0 9.46246 0.159375 9.33433 0.409375L7.03433 4.91563L2.03746 5.70937C1.75933 5.75312 1.52808 5.95 1.44058 6.21875C1.35308 6.4875 1.42496 6.78125 1.62183 6.98125L5.19683 10.5594L4.40933 15.5562C4.36558 15.8344 4.48121 16.1156 4.70933 16.2812C4.93746 16.4469 5.23746 16.4719 5.49058 16.3438L10.0031 14.05L14.5125 16.3438C14.7625 16.4719 15.0656 16.4469 15.2937 16.2812C15.5218 16.1156 15.6375 15.8375 15.5937 15.5562L14.8031 10.5594L18.3781 6.98125C18.5781 6.78125 18.6468 6.4875 18.5593 6.21875C18.4718 5.95 18.2437 5.75312 17.9625 5.70937L12.9687 4.91563L10.6718 0.409375Z"
+                fill="#FCC800"
+              />
+            </svg>
+          } @else if (product().ratingsAverage >= num - 0.5) {
+            <svg
+              width="20"
+              height="17"
+              viewBox="0 0 20 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.6719 0.409375C10.5438 0.159375 10.2844 0 10.0031 0C9.72189 0 9.46252 0.159375 9.33439 0.409375L7.03439 4.91563L2.03752 5.70937C1.75939 5.75312 1.52814 5.95 1.44064 6.21875C1.35314 6.4875 1.42502 6.78125 1.62189 6.98125L5.19689 10.5594L4.40939 15.5562C4.36564 15.8344 4.48127 16.1156 4.70939 16.2812C4.93752 16.4469 5.23752 16.4719 5.49064 16.3438L10.0031 14.05L14.5125 16.3438C14.7625 16.4719 15.0656 16.4469 15.2938 16.2812C15.5219 16.1156 15.6375 15.8375 15.5938 15.5562L14.8031 10.5594L18.3781 6.98125C18.5781 6.78125 18.6469 6.4875 18.5594 6.21875C18.4719 5.95 18.2438 5.75312 17.9625 5.70937L12.9688 4.91563L10.6719 0.409375ZM9.25314 3.86875V12.7469L6.12502 14.3375L6.74377 10.4156C6.78127 10.1781 6.70314 9.9375 6.53439 9.76875L3.72814 6.95937L7.65002 6.33437C7.88752 6.29688 8.09064 6.14687 8.20002 5.93437L9.25627 3.86562L9.25314 3.86875ZM10.7531 12.7469V3.86875L11.8094 5.9375C11.9188 6.15 12.1219 6.3 12.3594 6.3375L16.2813 6.9625L13.475 9.77188C13.3063 9.94063 13.2281 10.1812 13.2656 10.4187L13.8844 14.3406L10.7563 12.75L10.7531 12.7469Z"
+                fill="#FCC800"
+              />
+            </svg>
+          } @else {
+            <svg
+              width="20"
+              height="17"
+              viewBox="0 0 20 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.0031 0C10.2844 0 10.5438 0.159375 10.6719 0.409375L12.9688 4.91563L17.9656 5.70937C18.2438 5.75312 18.475 5.95 18.5625 6.21875C18.65 6.4875 18.5781 6.78125 18.3813 6.98125L14.8031 10.5594L15.5938 15.5562C15.6375 15.8344 15.5219 16.1156 15.2938 16.2812C15.0656 16.4469 14.7625 16.4719 14.5125 16.3438L10.0031 14.05L5.49375 16.3438C5.24375 16.4719 4.94063 16.4469 4.7125 16.2812C4.48438 16.1156 4.36875 15.8375 4.4125 15.5562L5.2 10.5594L1.625 6.98125C1.425 6.78125 1.35625 6.4875 1.44375 6.21875C1.53125 5.95 1.75938 5.75312 2.04063 5.70937L7.0375 4.91563L9.3375 0.409375C9.46563 0.159375 9.725 0 10.0063 0H10.0031ZM10.0031 2.4L8.19688 5.9375C8.0875 6.15 7.88438 6.3 7.64688 6.3375L3.725 6.9625L6.53125 9.77188C6.7 9.94063 6.77813 10.1812 6.74063 10.4187L6.12188 14.3406L9.6625 12.5406C9.875 12.4312 10.1281 12.4312 10.3438 12.5406L13.8844 14.3406L13.2656 10.4187C13.2281 10.1812 13.3063 9.94063 13.475 9.77188L16.2813 6.9625L12.3594 6.3375C12.1219 6.3 11.9188 6.15 11.8094 5.9375L10.0031 2.4Z"
+                fill="#FCC800"
+              />
+            </svg>
+          }
+        }
+      </div>
+
+      <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+        {{ product().ratingsAverage }} ({{ product().ratingsQuantity }})</span
+      >
+    </div>
+
+    <div class="flex items-center justify-between">
+      @if (product().priceAfterDiscount) {
+        <div>
+          <span class="text-lg font-bold text-primary-600">
+            {{ product().priceAfterDiscount }} {{ 'product.currency' | translate }}</span
+          >
+          <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2 font-medium">
+            {{ product().price }} {{ 'product.currency' | translate }}</span
+          >
+        </div>
+      } @else {
+        <span class="text-lg font-bold text-gray-800 dark:text-gray-100">
+          {{ product().price }} {{ 'product.currency' | translate }}</span
+        >
+      }
+
+      <button
+        [disabled]="isAddingProductToCart()"
+        (click)="addProductToCart(product()._id)"
+        class="cursor-pointer size-10 rounded-full flex items-center justify-center transition bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-70"
+        tabindex="0"
+      >
+        @if (isAddingProductToCart()) {
+          <i class="fa-solid fa-spinner fa-spin"></i>
+        } @else {
+          <i class="fa-solid fa-plus"></i>
+        }
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,290 @@
+<div class="space-y-6">
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ 'settings.header.title' | translate }}</h2>
+    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+      {{ 'settings.header.subtitle' | translate }}
+    </p>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+    <div class="p-6 sm:p-8 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-primary-100 flex items-center justify-center">
+          <i class="fa-solid fa-user text-2xl text-primary-600"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 dark:text-white">{{ 'settings.profile.title' | translate }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'settings.profile.subtitle' | translate }}</p>
+        </div>
+      </div>
+      <form [formGroup]="updateUserDataForm" (ngSubmit)="updateUserData()" class="space-y-5">
+        @if (updateUserDataeErrorMsg()) {
+          <div
+            class="mb-6 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-700 border border-red-200"
+          >
+            {{ updateUserDataeErrorMsg() }}
+          </div>
+        }
+        @if (updateUserDataeSuccessMsg()) {
+          <div
+            class="mb-6 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-700 border border-green-200"
+          >
+            {{ updateUserDataeSuccessMsg() }}
+          </div>
+        }
+
+        <div class="font-medium text-gray-700 dark:text-gray-300">
+          <label class="block text-sm mb-2">{{ 'settings.profile.nameLabel' | translate }}</label>
+          <input
+            formControlName="name"
+            name="name"
+            [placeholder]="'settings.profile.namePlaceholder' | translate"
+            class="w-full placeholder:text-gray-400 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700 dark:text-white"
+            type="text"
+          />
+          @let nameControl = updateUserDataForm.get('name');
+          @if (nameControl?.errors && nameControl?.touched) {
+            <div class="mt-2">
+              @if (nameControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.nameRequired' | translate"
+                ></app-error-message-alert>
+              }
+              @if (nameControl?.getError('minlength')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.nameMinLength' | translate"
+                ></app-error-message-alert>
+              }
+
+              @if (nameControl?.getError('maxlength')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.nameMaxLength' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+        <div class="font-medium text-gray-700 dark:text-gray-300">
+          <label class="block text-sm mb-2">{{ 'settings.profile.emailLabel' | translate }}</label>
+          <input
+            formControlName="email"
+            name="email"
+            [placeholder]="'settings.profile.emailPlaceholder' | translate"
+            class="w-full placeholder:text-gray-400 font-medium px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700 dark:text-white"
+            type="email"
+          />
+          @let emailControl = updateUserDataForm.get('email');
+          @if (emailControl?.errors && emailControl?.touched) {
+            <div class="mt-2">
+              @if (emailControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.emailRequired' | translate"
+                ></app-error-message-alert>
+              }
+              @if (emailControl?.getError('email')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.emailInvalid' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="font-medium text-gray-700 dark:text-gray-300">
+          <label class="block text-sm mb-2">{{ 'settings.profile.phoneLabel' | translate }}</label>
+          <input
+            formControlName="phone"
+            name="phone"
+            placeholder="01xxxxxxxxx"
+            class="w-full placeholder:text-gray-400 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700 dark:text-white"
+            type="tel"
+          />
+          @let phoneControl = updateUserDataForm.get('phone');
+          @if (phoneControl?.errors && phoneControl?.touched) {
+            <div class="mt-2">
+              @if (phoneControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.phoneRequired' | translate"
+                ></app-error-message-alert>
+              }
+              @if (phoneControl?.getError('pattern')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.phonePattern' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+        <div class="pt-4">
+          <button
+            [disabled]="isUpdatingUserData()"
+            type="submit"
+            class="cursor-pointer inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 shadow-lg shadow-primary-600/25"
+          >
+            @if (isUpdatingUserData()) {
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              {{ 'settings.buttons.saving' | translate }}
+            } @else {
+              <i class="fa-solid fa-floppy-disk"></i>
+              {{ 'settings.buttons.saveChanges' | translate }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+    <div class="p-6 sm:p-8">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center">
+          <i class="fa-solid fa-lock text-2xl text-amber-600"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 dark:text-white">{{ 'settings.password.title' | translate }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'settings.password.subtitle' | translate }}</p>
+        </div>
+      </div>
+      <form [formGroup]="changePasswordForm" (ngSubmit)="changeUserPassword()" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{            'settings.password.currentLabel' | translate
+          }}</label>
+          <div class="relative">
+            <input
+              formControlName="currentPassword"
+              name="currentPassword"
+              [placeholder]="'settings.password.currentPlaceholder' | translate"
+              class="w-full font-medium text-gray-700 dark:text-gray-200 placeholder:text-gray-400 px-4 py-3 pe-12 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700"
+              [type]="showCurrentPassword() ? 'text' : 'password'"
+            />
+            <button
+              (click)="toggleshowCurrentPassword()"
+              type="button"
+              class="cursor-pointer absolute inset-e-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              @if (showCurrentPassword() == false) {
+                <i class="fa-solid fa-eye"></i>
+              } @else {
+                <i class="fa-solid fa-eye-slash"></i>
+              }
+            </button>
+          </div>
+
+          @let currentPasswordControl = changePasswordForm.get('currentPassword');
+          @if (currentPasswordControl?.errors && currentPasswordControl?.touched) {
+            <div class="mt-2">
+              @if (currentPasswordControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.passwordRequired' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{            'settings.password.newLabel' | translate
+          }}</label>
+          <div class="relative">
+            <input
+              formControlName="password"
+              name="newPassword"
+              [placeholder]="'settings.password.newPlaceholder' | translate"
+              class="w-full font-medium text-gray-700 dark:text-gray-200 placeholder:text-gray-400 px-4 py-3 pe-12 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700"
+              [type]="showNewPassword() ? 'text' : 'password'"
+            />
+            <button
+              (click)="toggleshowNewPassword()"
+              type="button"
+              class="cursor-pointer absolute inset-e-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              @if (showNewPassword() == false) {
+                <i class="fa-solid fa-eye"></i>
+              } @else {
+                <i class="fa-solid fa-eye-slash"></i>
+              }
+            </button>
+          </div>
+
+          @let passwordControl = changePasswordForm.get('password');
+          @if (passwordControl?.errors && passwordControl?.touched) {
+            <div class="mt-2">
+              @if (passwordControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.passwordRequired' | translate"
+                ></app-error-message-alert>
+              }
+              @if (passwordControl?.getError('pattern')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.passwordPattern' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+          @if (passwordControl?.getError('sameAsCurrent') && changePasswordSubmitted()) {
+            <div class="mt-3 flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 dark:bg-amber-900/20 dark:border-amber-700">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i>
+              <div>
+                <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">{{ 'settings.errors.passwordSameAsCurrentTitle' | translate }}</p>
+                <p class="text-sm text-amber-700 dark:text-amber-400 mt-0.5">{{ 'settings.errors.passwordSameAsCurrent' | translate }}</p>
+              </div>
+            </div>
+          }
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{            'settings.password.confirmLabel' | translate
+          }}</label>
+          <div class="relative">
+            <input
+              formControlName="rePassword"
+              name="rePassword"
+              [placeholder]="'settings.password.confirmPlaceholder' | translate"
+              class="w-full font-medium text-gray-700 dark:text-gray-200 placeholder:text-gray-400 px-4 py-3 pe-12 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark:bg-gray-700"
+              [type]="showRePassword() ? 'text' : 'password'"
+            />
+            <button
+              (click)="toggleshowRePassword()"
+              type="button"
+              class="cursor-pointer absolute inset-e-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              @if (showRePassword() == false) {
+                <i class="fa-solid fa-eye"></i>
+              } @else {
+                <i class="fa-solid fa-eye-slash"></i>
+              }
+            </button>
+          </div>
+
+          @let rePasswordControl = changePasswordForm.get('rePassword');
+          @if (rePasswordControl?.errors && rePasswordControl?.touched) {
+            <div class="mt-2">
+              @if (rePasswordControl?.getError('required')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.confirmRequired' | translate"
+                ></app-error-message-alert>
+              }
+              @if (rePasswordControl?.getError('misMatch')) {
+                <app-error-message-alert
+                  [textMessage]="'settings.errors.passwordMismatch' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+        <div class="pt-4">
+          <button
+            [disabled]="isChangingPassword()"
+            type="submit"
+            class="cursor-pointer inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600 text-white font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 shadow-lg shadow-amber-600/25"
+          >
+            @if (isChangingPassword()) {
+              <i class="fa-solid fa-lock"></i>
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              {{ 'settings.buttons.changing' | translate }}
+            } @else {
+              <i class="fa-solid fa-lock"></i>
+              {{ 'settings.buttons.changePassword' | translate }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

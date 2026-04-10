@@ -1,0 +1,194 @@
+<section class="py-16">
+  <div class="container mx-auto px-4" id="login-section">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+      <div class="hidden lg:block">
+        <div class="text-center space-y-6">
+          <img
+            class="w-full h-96 object-cover rounded-2xl shadow-lg"
+            [alt]="'login.image_alt' | translate"
+            src="assets/bg-login.png"
+          />
+          <div class="space-y-4">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
+              {{ 'login.hero_title' | translate }}
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 font-medium">
+              {{ 'login.hero_subtitle' | translate }}
+            </p>
+            <div
+              class="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400 font-medium"
+            >
+              <div class="flex items-center">
+                <i class="fa-solid fa-truck text-primary-600 me-2"></i>
+                {{ 'login.features.free_delivery' | translate }}
+              </div>
+              <div class="flex items-center">
+                <i class="fa-solid fa-shield-halved text-primary-600 me-2"></i>
+                {{ 'login.features.secure_payment' | translate }}
+              </div>
+              <div class="flex items-center">
+                <i class="fa-solid fa-clock text-primary-600 me-2"></i>
+                {{ 'login.features.support' | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
+          <div class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+              <span class="text-3xl font-bold text-primary-600"
+                >Fresh<span class="text-gray-800 dark:text-gray-100">Cart</span></span
+              >
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+              {{ 'login.welcome_back' | translate }}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ 'login.welcome_subtitle' | translate }}</p>
+          </div>
+          <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+            <div>
+              <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                'login.labels.email' | translate
+              }}</label>
+              <div class="relative">
+                <input
+                  formControlName="email"
+                  class="w-full px-4 py-3 ps-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all font-medium placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+                  [placeholder]="'login.placeholders.email' | translate"
+                  id="email"
+                  type="email"
+                  name="email"
+                />
+                <i
+                  class="fa-solid fa-envelope absolute inset-s-4 top-1/2 -translate-y-1/2 text-gray-400"
+                ></i>
+              </div>
+              @let emailControl = loginForm.get('email');
+              @if (emailControl?.errors && emailControl?.touched) {
+                <div class="mt-2">
+                  @if (emailControl?.getError('required')) {
+                    <app-error-message-alert
+                      [textMessage]="'login.errors.email_required' | translate"
+                    ></app-error-message-alert>
+                  }
+                  @if (emailControl?.getError('email')) {
+                    <app-error-message-alert
+                      [textMessage]="'login.errors.email_invalid' | translate"
+                    ></app-error-message-alert>
+                  }
+                </div>
+              }
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{
+                  'login.labels.password' | translate
+                }}</label>
+                <a
+                  class="text-sm text-primary-600 hover:text-primary-700 cursor-pointer font-medium"
+                  routerLink="/forget-password"
+                >
+                  {{ 'login.forgot_password' | translate }}
+                </a>
+              </div>
+              <div class="relative">
+                <input
+                  formControlName="password"
+                  id="password"
+                  class="w-full px-4 py-3 ps-12 pr-12 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all font-medium placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+                  [placeholder]="'login.placeholders.password' | translate"
+                  [type]="showPassword() ? 'text' : 'password'"
+                  name="password"
+                />
+                <i
+                  class="fa-solid fa-lock absolute inset-s-4 top-1/2 -translate-y-1/2 text-gray-400"
+                ></i>
+                <button
+                  (click)="togglePassword()"
+                  type="button"
+                  class="absolute cursor-pointer inset-e-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  @if (showPassword() == false) {
+                    <i class="fa-solid fa-eye"></i>
+                  } @else {
+                    <i class="fa-solid fa-eye-slash"></i>
+                  }
+                </button>
+              </div>
+              @let passwordControl = loginForm.get('password');
+              @if (passwordControl?.errors && passwordControl?.touched) {
+                <div class="mt-2">
+                  @if (passwordControl?.getError('required')) {
+                    <app-error-message-alert
+                      [textMessage]="'login.errors.password_required' | translate"
+                    ></app-error-message-alert>
+                  }
+                  @if (passwordControl?.getError('pattern')) {
+                    <app-error-message-alert
+                      [textMessage]="'login.errors.password_pattern' | translate"
+                    ></app-error-message-alert>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="flex items-center justify-between">
+              <label class="flex items-center">
+                <input
+                  formControlName="rememberMe"
+                  class="h-4 w-4 text-primary-600 accent-primary-600 border-2 border-gray-300 focus:ring-primary-500"
+                  type="checkbox"
+                  name="rememberMe"
+                />
+                <span class="ms-3 text-sm text-gray-700 dark:text-gray-300 font-medium">{{
+                  'login.remember_me' | translate
+                }}</span>
+              </label>
+            </div>
+
+            <button
+              [disabled]="loginForm.invalid || isLoginLoading()"
+              type="submit"
+              class="w-full cursor-pointer bg-primary-600 text-white py-3 px-4 rounded-xl not-disabled:hover:bg-primary-700 transition-all duration-200 font-semibold text-lg shadow-lg not-disabled:hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (isLoginLoading()) {
+                <i class="fa-solid fa-spinner fa-spin me-2"></i>
+              }
+              {{ 'login.sign_in_btn' | translate }}
+            </button>
+          </form>
+          <div class="text-center mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+            <p class="text-gray-600 dark:text-gray-400 font-medium">
+              {{ 'login.new_user' | translate }}
+              <a
+                class="text-primary-600 hover:text-primary-700 ms-2 font-semibold cursor-pointer"
+                routerLink="/signup"
+              >
+                {{ 'login.create_account' | translate }}
+              </a>
+            </p>
+          </div>
+          <div
+            class="flex items-center justify-center space-x-6 mt-6 text-xs text-gray-500 dark:text-gray-400 font-medium"
+          >
+            <div class="flex items-center">
+              <i class="fa-solid fa-lock me-1"></i>
+              {{ 'login.footer.ssl' | translate }}
+            </div>
+            <div class="flex items-center">
+              <i class="fa-solid fa-users me-1"></i>
+              {{ 'login.footer.users' | translate }}
+            </div>
+            <div class="flex items-center">
+              <i class="fa-solid fa-star me-1"></i>
+              {{ 'login.footer.rating' | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

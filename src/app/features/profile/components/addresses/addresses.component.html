@@ -1,0 +1,271 @@
+<div>
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ 'addresses.title' | translate }}</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 font-medium">{{ 'addresses.subtitle' | translate }}</p>
+    </div>
+    <button
+      (click)="openModalAddress()"
+      class="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-600/25"
+    >
+      <i class="fa-solid fa-plus text-sm"></i>
+      {{ 'addresses.addNew' | translate }}
+    </button>
+  </div>
+
+  @if (isLoadingAddresses()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse w-full">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-5 shadow-sm overflow-hidden">
+        <div class="flex flex-row items-start justify-between gap-3">
+          <div class="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gray-200 dark:bg-gray-600 shrink-0"></div>
+            <div class="flex-1 min-w-0 space-y-3">
+              <div class="h-5 w-24 sm:w-32 bg-gray-200 dark:bg-gray-600 rounded-lg"></div>
+              <div class="space-y-2">
+                <div class="h-3 w-full bg-gray-100 dark:bg-gray-700 rounded"></div>
+                <div class="h-3 w-2/5 bg-gray-100 dark:bg-gray-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gray-100 dark:bg-gray-700"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-5 shadow-sm overflow-hidden">
+        <div class="flex flex-row items-start justify-between gap-3">
+          <div class="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gray-200 dark:bg-gray-600 shrink-0"></div>
+            <div class="flex-1 min-w-0 space-y-3">
+              <div class="h-5 w-24 sm:w-32 bg-gray-200 dark:bg-gray-600 rounded-lg"></div>
+              <div class="space-y-2">
+                <div class="h-3 w-full bg-gray-100 dark:bg-gray-700 rounded"></div>
+                <div class="h-3 w-2/5 bg-gray-100 dark:bg-gray-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gray-100 dark:bg-gray-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    @if (addressList().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (address of addressList(); track address._id) {
+          <div
+            class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm hover:shadow-md hover:border-primary-100 dark:hover:border-primary-800 transition-all duration-200 group"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-4 flex-1">
+                <div
+                  class="w-11 h-11 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors"
+                >
+                  <i class="fa-solid fa-location-dot text-lg text-primary-600"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-bold text-gray-900 dark:text-white mb-1">{{ address.name }}</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2 font-medium">
+                    {{ address.details }}
+                  </p>
+                  <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                    <span class="flex items-center gap-1.5">
+                      <i class="fa-solid fa-phone text-xs"></i>
+                      {{ address.phone }}
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                      <i class="fa-solid fa-city text-xs"></i>
+                      {{ address.city }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  class="cursor-pointer size-9 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-primary-100 hover:text-primary-600 flex items-center justify-center transition-colors"
+                  [title]="'addresses.edit' | translate"
+                >
+                  <i class="fa-solid fa-pen text-sm"></i>
+                </button>
+                <button
+                  (click)="delteAddress(address._id)"
+                  class="cursor-pointer size-9 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition-colors disabled:opacity-50"
+                  [title]="'addresses.delete' | translate"
+                >
+                  <i class="fa-solid fa-trash text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-12 text-center">
+        <div
+          class="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-5"
+        >
+          <i class="fa-solid fa-location-dot text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+          {{ 'addresses.emptyTitle' | translate }}
+        </h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto font-medium">
+          {{ 'addresses.emptySubtitle' | translate }}
+        </p>
+        <button
+          (click)="openModalAddress()"
+          class="cursor-pointer inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-600/25"
+        >
+          <i class="fa-solid fa-plus"></i>
+          {{ 'addresses.addFirst' | translate }}
+        </button>
+      </div>
+    }
+  }
+</div>
+
+@if (isShowModal()) {
+  <div class="fixed inset-0 z-100 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60" (click)="closeModalAddress()"></div>
+    <div class="relative w-full max-w-130 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ 'addresses.modal.title' | translate }}</h4>
+        <button
+          [disabled]="isAddingAddress()"
+          (click)="closeModalAddress()"
+          type="button"
+          class="cursor-pointer size-9 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form [formGroup]="addressesForm" (ngSubmit)="submitForm()" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{            'addresses.modal.labelName' | translate
+          }}</label>
+          <input
+            formControlName="name"
+            name="name"
+            [placeholder]="'addresses.modal.placeholderName' | translate"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+            type="text"
+          />
+          @let nameControl = addressesForm.get('name');
+          @if (nameControl?.errors && nameControl?.touched) {
+            <div class="mt-2">
+              @if (nameControl?.getError('required') || nameControl?.getError('minlength')) {
+                <app-error-message-alert
+                  [textMessage]="'addresses.modal.errorNameMin' | translate"
+                ></app-error-message-alert>
+              }
+              @if (nameControl?.getError('maxlength')) {
+                <app-error-message-alert
+                  [textMessage]="'addresses.modal.errorNameMax' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{            'addresses.modal.labelDetails' | translate
+          }}</label>
+          <textarea
+            formControlName="details"
+            name="details"
+            [placeholder]="'addresses.modal.placeholderDetails' | translate"
+            rows="3"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all resize-none placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+          ></textarea>
+          @let detailsControl = addressesForm.get('details');
+          @if (detailsControl?.errors && detailsControl?.touched) {
+            <div class="mt-2">
+              @if (detailsControl?.getError('required') || detailsControl?.getError('minlength')) {
+                <app-error-message-alert
+                  [textMessage]="'addresses.modal.errorDetailsMin' | translate"
+                ></app-error-message-alert>
+              }
+              @if (detailsControl?.getError('maxlength')) {
+                <app-error-message-alert
+                  [textMessage]="'addresses.modal.errorDetailsMax' | translate"
+                ></app-error-message-alert>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{              'addresses.modal.labelPhone' | translate
+            }}</label>
+            <input
+              formControlName="phone"
+              name="phone"
+              placeholder="01xxxxxxxxx"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+              type="tel"
+            />
+            @let phoneControl = addressesForm.get('phone');
+            @if (phoneControl?.invalid && phoneControl?.touched) {
+              <div class="mt-2">
+                <app-error-message-alert
+                  [textMessage]="'addresses.modal.errorPhone' | translate"
+                ></app-error-message-alert>
+              </div>
+            }
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{              'addresses.modal.labelCity' | translate
+            }}</label>
+            <input
+              formControlName="city"
+              name="city"
+              [placeholder]="'addresses.modal.placeholderCity' | translate"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all placeholder:text-gray-400 dark:bg-gray-700 dark:text-white"
+              type="text"
+            />
+            @let cityControl = addressesForm.get('city');
+            @if (cityControl?.errors && cityControl?.touched) {
+              <div class="mt-2">
+                @if (cityControl?.getError('required') || cityControl?.getError('minlength')) {
+                  <app-error-message-alert
+                    [textMessage]="'addresses.modal.errorCityMin' | translate"
+                  ></app-error-message-alert>
+                }
+                @if (cityControl?.getError('maxlength')) {
+                  <app-error-message-alert
+                    [textMessage]="'addresses.modal.errorCityMax' | translate"
+                  ></app-error-message-alert>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 pt-4">
+          <button
+            [disabled]="isAddingAddress()"
+            (click)="closeModalAddress()"
+            type="button"
+            class="cursor-pointer flex-1 py-3 px-6 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {{ 'addresses.modal.cancel' | translate }}
+          </button>
+          <button
+            [disabled]="isAddingAddress()"
+            type="submit"
+            class="cursor-pointer flex-1 py-3 px-6 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50 shadow-lg shadow-primary-600/25"
+          >
+            @if (isAddingAddress()) {
+              <i class="fa-solid fa-spinner fa-spin"></i>
+            } @else {
+              {{ 'addresses.modal.submit' | translate }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

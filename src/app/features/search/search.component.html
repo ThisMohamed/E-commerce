@@ -1,0 +1,557 @@
+<div class="min-h-screen bg-gray-50/50 dark:bg-gray-900">
+  <div class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+    <div class="container px-4 py-6">
+      <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4 font-medium">
+        <a class="hover:text-primary-600 transition-colors" routerLink="/home">{{
+          'search.breadcrumb.home' | translate
+        }}</a>
+        <span class="text-gray-300 dark:text-gray-600">/</span>
+        <span class="text-gray-900 dark:text-white">{{ 'search.breadcrumb.results' | translate }}</span>
+      </nav>
+      <form (submit)="onSearchSubmit($event)" class="max-w-2xl">
+        <div class="relative">
+          <i
+            class="fa-solid fa-magnifying-glass absolute inset-s-4 top-1/2 -translate-y-1/2 text-gray-400"
+          ></i>
+          <input
+            type="text"
+            [placeholder]="'search.inputPlaceholder' | translate"
+            class="w-full ps-12 pe-4 py-3 rounded-xl font-medium border border-gray-200 dark:border-gray-600 placeholder:text-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-lg dark:bg-gray-700 dark:text-white"
+            [value]="searchQuery()"
+            (input)="onSearchChange($any($event.target).value)"
+          />
+        </div>
+      </form>
+      @if (searchQuery() && searchQuery().trim()) {
+        <div class="mt-4">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ 'search.resultsFor' | translate }} "{{ searchQuery() }}"
+          </h1>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            {{ 'search.foundPrefix' | translate }} {{ productsList().length }}
+            {{ 'search.foundSuffix' | translate }}
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="container px-4 py-8">
+    <div class="flex gap-8">
+      <aside class="hidden lg:block w-64 shrink-0">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 sticky top-24">
+          <div class="space-y-6">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-900 dark:text-white">
+                  {{ 'search.filters.categories' | translate }}
+                </h3>
+                <span class="text-xs text-primary-600 font-medium">
+                  {{ selectedCategories().length }} {{ 'search.filters.selected' | translate }}
+                </span>
+              </div>
+              <div class="space-y-2 max-h-52 overflow-y-auto">
+                @for (category of categoriesList(); track category._id) {
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      class="w-4 h-4 rounded-[2.5px] border-[#767676] ring-0 text-primary-600 focus:ring-primary-500"
+                      type="checkbox"
+                      [checked]="selectedCategories().includes(category._id)"
+                      (change)="toggleCategory(category._id)"
+                    />
+                    <span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                      {{ category.name }}
+                    </span>
+                  </label>
+                }
+              </div>
+            </div>
+
+            <hr class="border-gray-100 dark:border-gray-700" />
+
+            <div>
+              <h3 class="font-bold text-gray-900 dark:text-white mb-4">
+                {{ 'search.filters.priceRange' | translate }}
+              </h3>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label class="text-xs text-gray-500 mb-1 block">{{
+                    'search.filters.minPrice' | translate
+                  }}</label>
+                  <input
+                    [disabled]="isLoadingProducts()"
+                    [value]="minPrice() || ''"
+                    (input)="onMinPriceChange($any($event.target).value)"
+                    placeholder="0"
+                    class="w-full px-3 py-2 rounded border border-gray-200 dark:border-gray-600 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none dark:bg-gray-700 dark:text-white"
+                    type="number"
+                  />
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">{{
+                    'search.filters.maxPrice' | translate
+                  }}</label>
+                  <input
+                    [disabled]="isLoadingProducts()"
+                    [value]="maxPrice() || ''"
+                    (input)="onMaxPriceChange($any($event.target).value)"
+                    [placeholder]="'search.filters.noLimit' | translate"
+                    class="w-full px-3 py-2 rounded border border-gray-200 dark:border-gray-600 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none dark:bg-gray-700 dark:text-white"
+                    type="number"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  (click)="setMaxPrice(500)"
+                  [class]="{
+                    'bg-gray-100': maxPrice() != 500,
+                    'text-gray-600': maxPrice() != 500,
+                    'hover:bg-gray-200': maxPrice() != 500,
+                    'bg-primary-600': maxPrice() == 500,
+                    'text-white': maxPrice() == 500,
+                    'hover:bg-primary-600': maxPrice() == 500,
+                  }"
+                  class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+                >
+                  {{ 'search.filters.under500' | translate }}
+                </button>
+                <button
+                  (click)="setMaxPrice(1000)"
+                  [class]="{
+                    'bg-gray-100': maxPrice() != 1000,
+                    'text-gray-600': maxPrice() != 1000,
+                    'hover:bg-gray-200': maxPrice() != 1000,
+                    'bg-primary-600': maxPrice() == 1000,
+                    'text-white': maxPrice() == 1000,
+                    'hover:bg-primary-600': maxPrice() == 1000,
+                  }"
+                  class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+                >
+                  {{ 'search.filters.under1k' | translate }}
+                </button>
+                <button
+                  (click)="setMaxPrice(5000)"
+                  [class]="{
+                    'bg-gray-100': maxPrice() != 5000,
+                    'text-gray-600': maxPrice() != 5000,
+                    'hover:bg-gray-200': maxPrice() != 5000,
+                    'bg-primary-600': maxPrice() == 5000,
+                    'text-white': maxPrice() == 5000,
+                    'hover:bg-primary-600': maxPrice() == 5000,
+                  }"
+                  class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+                >
+                  {{ 'search.filters.under5k' | translate }}
+                </button>
+                <button
+                  (click)="setMaxPrice(10000)"
+                  [class]="{
+                    'bg-gray-100': maxPrice() != 10000,
+                    'text-gray-600': maxPrice() != 10000,
+                    'hover:bg-gray-200': maxPrice() != 10000,
+                    'bg-primary-600': maxPrice() == 10000,
+                    'text-white': maxPrice() == 10000,
+                    'hover:bg-primary-600': maxPrice() == 10000,
+                  }"
+                  class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+                >
+                  {{ 'search.filters.under10k' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <hr class="border-gray-100 dark:border-gray-700" />
+
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-900 dark:text-white">{{ 'search.filters.brands' | translate }}</h3>
+                <span class="text-xs text-primary-600 font-medium"
+                  >{{ selectedBrands().length }} {{ 'search.filters.selected' | translate }}</span
+                >
+              </div>
+              <div class="space-y-2 max-h-52 overflow-y-auto">
+                @for (brand of brandsList(); track brand._id) {
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      class="w-4 h-4 rounded-[2.5px] border-[#767676] ring-0 text-primary-600 focus:ring-primary-500"
+                      type="checkbox"
+                      [checked]="selectedBrands().includes(brand._id)"
+                      (change)="toggleBrand(brand._id)"
+                    />
+                    <span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                      {{ brand.name }}
+                    </span>
+                  </label>
+                }
+              </div>
+            </div>
+
+            @if (
+              (searchQuery() && searchQuery().trim()) ||
+              selectedCategories().length > 0 ||
+              selectedBrands().length > 0 ||
+              minPrice() ||
+              maxPrice()
+            ) {
+              <hr class="border-gray-100 dark:border-gray-700" />
+              <button
+                routerLink="/search"
+                class="cursor-pointer w-full py-2.5 rounded border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors"
+              >
+                {{ 'search.filters.clearAll' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      </aside>
+
+      <main class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-6 gap-4 flex-wrap">
+          <div class="flex items-center gap-4">
+            <button
+              (click)="openFilters()"
+              class="lg:hidden cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <i class="fa-solid fa-sliders"></i>
+              {{ 'search.filters.title' | translate }}
+            </button>
+            <div class="flex items-center gap-1 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 p-1">
+              <button
+                (click)="changeViewType('grid')"
+                [class]="{
+                  'bg-primary-600': viewType() == 'grid',
+                  'text-white': viewType() == 'grid',
+                  'hover:text-white': viewType() == 'grid',
+                  'hover:text-gray-700': viewType() != 'grid',
+                  'text-gray-500': viewType() != 'grid',
+                }"
+                class="p-2 rounded-md transition-colors cursor-pointer"
+              >
+                <i class="fa-solid fa-grip-vertical"></i>
+              </button>
+              <button
+                (click)="changeViewType('list')"
+                [class]="{
+                  'bg-primary-600': viewType() == 'list',
+                  'text-white': viewType() == 'list',
+                  'hover:text-white': viewType() == 'list',
+                  'hover:text-gray-700': viewType() != 'list',
+                  'text-gray-500': viewType() != 'list',
+                }"
+                class="p-2 rounded-md transition-colors cursor-pointer"
+              >
+                <i class="fa-solid fa-list"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 font-medium">
+            <span class="text-sm text-gray-500 dark:text-gray-400">{{ 'search.sort.sortBy' | translate }}:</span>
+            <select
+              [value]="sort() || ''"
+              (change)="onSortChange($any($event.target).value)"
+              class="ps-4 pe-7 text-gray-700 dark:text-gray-200 py-2 w-42.75 rounded border border-gray-200 dark:border-gray-600 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none bg-white dark:bg-gray-800"
+            >
+              <option value="">{{ 'search.sort.relevance' | translate }}</option>
+              <option value="price">{{ 'search.sort.priceLow' | translate }}</option>
+              <option value="-price">{{ 'search.sort.priceHigh' | translate }}</option>
+              <option value="-ratingsAverage">{{ 'search.sort.rating' | translate }}</option>
+              <option value="title">{{ 'search.sort.nameAZ' | translate }}</option>
+              <option value="-title">{{ 'search.sort.nameZA' | translate }}</option>
+            </select>
+          </div>
+        </div>
+
+        @if (
+          (searchQuery() && searchQuery().trim()) ||
+          selectedCategories().length > 0 ||
+          selectedBrands().length > 0 ||
+          minPrice() ||
+          maxPrice()
+        ) {
+          <div class="mb-6 flex items-center gap-2 flex-wrap font-medium">
+            <span class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+              <i class="fa-solid fa-filter text-xs"></i>
+              {{ 'search.filters.active' | translate }}:
+            </span>
+            @if (searchQuery() && searchQuery().trim()) {
+              <span
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs"
+              >
+                "{{ searchQuery() }}"
+                <button (click)="removeSearchQuery()" class="hover:text-red-500 cursor-pointer">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            }
+            @for (catId of selectedCategories(); track catId) {
+              <span
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary-100 text-primary-700 text-xs"
+              >
+                {{ categoriesList().find(c => c._id === catId)?.name }}
+                <button (click)="removeCategory(catId)" class="hover:text-red-500 cursor-pointer">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            }
+            @for (brandId of selectedBrands(); track brandId) {
+              <span
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-100 text-violet-700 text-xs"
+              >
+                {{ brandsList().find(b => b._id === brandId)?.name }}
+                <button (click)="removeBrand(brandId)" class="hover:text-red-500 cursor-pointer">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            }
+            @if (minPrice() || maxPrice()) {
+              <span
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs"
+              >
+                {{ minPrice() ?? 0 }} - {{ maxPrice() ?? '∞' }} EGP
+                <button (click)="clearPrice()" class="hover:text-red-500 cursor-pointer">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            }
+            <button
+              routerLink="/search"
+              class="text-xs text-gray-500 hover:text-gray-700 underline ml-2 cursor-pointer"
+            >
+              {{ 'search.filters.clearAllText' | translate }}
+            </button>
+          </div>
+        }
+
+        @if (isLoadingProducts()) {
+          <app-loading-spinner [message]="'search.loading' | translate"></app-loading-spinner>
+        } @else {
+          @if (productsList().length > 0) {
+            <div
+              [class]="{
+                'grid-cols-2': viewType() == 'grid',
+                'sm:grid-cols-3': viewType() == 'grid',
+                'lg:grid-cols-4': viewType() == 'grid',
+              }"
+              class="grid gap-4"
+            >
+              @for (
+                product of productsList()
+                  | paginate
+                    : {
+                        id: 'searchPagination',
+                        itemsPerPage: pageSize(),
+                        currentPage: currPage(),
+                        totalItems: total(),
+                      };
+                track product._id
+              ) {
+                <app-product-card [product]="product"></app-product-card>
+              }
+            </div>
+            @if (total() > pageSize()) {
+              <div class="flex items-center justify-center pt-5">
+                <pagination-controls
+                  (pageChange)="fetchProducts($event)"
+                  id="searchPagination"
+                  [maxSize]="9"
+                  [directionLinks]="true"
+                  [autoHide]="true"
+                  [responsive]="true"
+                  previousLabel=""
+                  nextLabel=""
+                ></pagination-controls>
+              </div>
+            }
+          } @else {
+            <app-empty-state
+              [iconClass]="'fa-solid fa-magnifying-glass text-3xl text-gray-400'"
+              [title]="'search.noProducts.title' | translate"
+              [desc]="'search.noProducts.desc' | translate"
+            >
+              <button
+                routerLink="/search"
+                class="mt-6 inline-flex cursor-pointer items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+              >
+                {{ 'search.filters.clearFilters' | translate }}
+              </button>
+            </app-empty-state>
+          }
+        }
+      </main>
+    </div>
+  </div>
+</div>
+
+@if (isMenuOpen()) {
+  <div class="fixed inset-0 z-50 lg:hidden">
+    <div (click)="closeFilters()" class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-80 bg-white dark:bg-gray-800 p-6 overflow-y-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-bold dark:text-white">{{ 'search.filters.title' | translate }}</h2>
+        <button
+          (click)="closeFilters()"
+          class="size-8 cursor-pointer rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-6">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-900 dark:text-white">{{ 'search.filters.categories' | translate }}</h3>
+            <span class="text-xs text-primary-600 font-medium"
+              >{{ selectedCategories().length }} {{ 'search.filters.selected' | translate }}</span
+            >
+          </div>
+          <div class="space-y-2 max-h-52 overflow-y-auto">
+            @for (category of categoriesList(); track category._id) {
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  class="w-4 h-4 rounded-[2.5px] border-[#767676] ring-0 text-primary-600 focus:ring-primary-500"
+                  type="checkbox"
+                  [checked]="selectedCategories().includes(category._id)"
+                  (change)="toggleCategory(category._id)"
+                />
+                <span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">{{
+                  category.name
+                }}</span>
+              </label>
+            }
+          </div>
+        </div>
+        <hr class="border-gray-100 dark:border-gray-700" />
+        <div>
+          <h3 class="font-bold text-gray-900 dark:text-white mb-4">
+            {{ 'search.filters.priceRange' | translate }}
+          </h3>
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">{{
+                'search.filters.minPrice' | translate
+              }}</label>
+              <input
+                [value]="minPrice() || ''"
+                (input)="onMinPriceChange($any($event.target).value)"
+                placeholder="0"
+                class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none dark:bg-gray-700 dark:text-white"
+                type="number"
+                [disabled]="isLoadingProducts()"
+              />
+            </div>
+            <div>
+              <label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">{{
+                'search.filters.maxPrice' | translate
+              }}</label>
+              <input
+                [value]="maxPrice() || ''"
+                (input)="onMaxPriceChange($any($event.target).value)"
+                [placeholder]="'search.filters.noLimit' | translate"
+                class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none dark:bg-gray-700 dark:text-white"
+                type="number"
+                [disabled]="isLoadingProducts()"
+              />
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button
+              (click)="setMaxPrice(500)"
+              [class]="{
+                'bg-gray-100': maxPrice() != 500,
+                'dark:bg-gray-600': maxPrice() != 500,
+                'text-gray-600': maxPrice() != 500,
+                'dark:text-gray-300': maxPrice() != 500,
+                'bg-primary-600': maxPrice() == 500,
+                'text-white': maxPrice() == 500,
+              }"
+              class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium"
+            >
+              {{ 'search.filters.under500' | translate }}
+            </button>
+            <button
+              (click)="setMaxPrice(1000)"
+              [class]="{
+                'bg-gray-100': maxPrice() != 1000,
+                'dark:bg-gray-600': maxPrice() != 1000,
+                'text-gray-600': maxPrice() != 1000,
+                'dark:text-gray-300': maxPrice() != 1000,
+                'bg-primary-600': maxPrice() == 1000,
+                'text-white': maxPrice() == 1000,
+              }"
+              class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium"
+            >
+              {{ 'search.filters.under1k' | translate }}
+            </button>
+            <button
+              (click)="setMaxPrice(5000)"
+              [class]="{
+                'bg-gray-100': maxPrice() != 5000,
+                'dark:bg-gray-600': maxPrice() != 5000,
+                'text-gray-600': maxPrice() != 5000,
+                'dark:text-gray-300': maxPrice() != 5000,
+                'bg-primary-600': maxPrice() == 5000,
+                'text-white': maxPrice() == 5000,
+              }"
+              class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium"
+            >
+              {{ 'search.filters.under5k' | translate }}
+            </button>
+            <button
+              (click)="setMaxPrice(10000)"
+              [class]="{
+                'bg-gray-100': maxPrice() != 10000,
+                'dark:bg-gray-600': maxPrice() != 10000,
+                'text-gray-600': maxPrice() != 10000,
+                'dark:text-gray-300': maxPrice() != 10000,
+                'bg-primary-600': maxPrice() == 10000,
+                'text-white': maxPrice() == 10000,
+              }"
+              class="cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium"
+            >
+              {{ 'search.filters.under10k' | translate }}
+            </button>
+          </div>
+        </div>
+        <hr class="border-gray-100 dark:border-gray-700" />
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-900 dark:text-white">{{ 'search.filters.brands' | translate }}</h3>
+            <span class="text-xs text-primary-600 font-medium"
+              >{{ selectedBrands().length }} {{ 'search.filters.selected' | translate }}</span
+            >
+          </div>
+          <div class="space-y-2 max-h-52 overflow-y-auto">
+            @for (brand of brandsList(); track brand._id) {
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  class="w-4 h-4 rounded-[2.5px] border-[#767676] ring-0 text-primary-600 focus:ring-primary-500"
+                  type="checkbox"
+                  [checked]="selectedBrands().includes(brand._id)"
+                  (change)="toggleBrand(brand._id)"
+                />
+                <span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">{{
+                  brand.name
+                }}</span>
+              </label>
+            }
+          </div>
+        </div>
+        @if (
+          (searchQuery() && searchQuery().trim()) ||
+          selectedCategories().length > 0 ||
+          selectedBrands().length > 0 ||
+          minPrice() ||
+          maxPrice()
+        ) {
+          <hr class="border-gray-100 dark:border-gray-700" />
+          <button
+            routerLink="/search"
+            class="w-full py-2.5 cursor-pointer rounded border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 transition-colors"
+          >
+            {{ 'search.filters.clearAll' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

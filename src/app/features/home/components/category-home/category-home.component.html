@@ -1,0 +1,39 @@
+<section class="py-10">
+  <div class="container px-4">
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8">
+      <app-section-title
+        [title]="'categoryHomeSection.shopBy' | translate"
+        [highlighted]="'categoryHomeSection.category' | translate"
+      >
+      </app-section-title>
+
+      <a
+        routerLink="/categories"
+        class="text-primary-600 self-end sm:self-auto hover:text-primary-700 font-medium flex items-center gap-1 cursor-pointer"
+      >
+        {{ 'categoryHomeSection.viewAll' | translate }} <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      @for (category of categoriesList(); track category._id) {
+        <a
+          [routerLink]="['/categories', category._id]"
+          class="bg-white dark:bg-gray-800 rounded p-4 text-center shadow-sm hover:shadow-md transition group cursor-pointer"
+        >
+          <div
+            class="h-20 w-20 overflow-hidden bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 dark:group-hover:bg-primary-800/40 transition"
+          >
+            <img
+              [alt]="category.name"
+              class="w-full h-full object-cover"
+              [src]="category.image"
+              style="color: transparent"
+            />
+          </div>
+          <h3 class="font-medium text-gray-700 dark:text-gray-200">{{ category.name | translateCategory }}</h3>
+        </a>
+      }
+    </div>
+  </div>
+</section>
