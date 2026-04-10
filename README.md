@@ -6,6 +6,8 @@ A full-featured, production-ready e-commerce web application built with modern A
 
 ## Live Demo
 
+**[https://ecommeracee.netlify.app/home](https://ecommeracee.netlify.app/home)**
+
 Deployed on **Netlify** with SSR via `@netlify/angular-runtime`.
 
 ---
@@ -333,6 +335,12 @@ All data is fetched from the **Route Misr E-Commerce API**:
 | `GET /api/v1/addresses` | Get saved addresses |
 | `POST /api/v1/addresses` | Add address |
 | `DELETE /api/v1/addresses/:id` | Delete address |
+
+---
+
+## Author
+
+**Mohamed Ahmed**
 
 ---
 
